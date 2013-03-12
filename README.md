@@ -1,35 +1,47 @@
 js-template
 =========
 
-js-template is a powerful jQuery-based JavaScript templating framework. This project is an updated and modernized reincarnation of Google's original JsTemplate project (http://code.google.com/p/google-jstemplate/). js-template has unique features such as the ability for authors to write templates in valid (X)HTML, allowing validation and proper separation of view and controller logic, as well as the ability to repeatedly and efficiently (re)fill templates by determining and managing diffs to previously rendered template instances.
+js-template is a powerful jQuery-based JavaScript templating framework. This project is an updated and modernized reincarnation of Google's excellent [JsTemplate project](http://code.google.com/p/google-jstemplate/).
 
-To familiarize yourself with the basic library and its usage, please read the original documentation at http://code.google.com/apis/jstemplate/docs/howto.html. Once you understand the basic concepts, refer to the following changes js-template:
+js-template has unique features and expressive power not found in other client-side templating frameworks:
 
-## Changes to JsTemplate
+* Supported in practically all browsers (even back to IE6 & FF3), including mobile browsers
+* Fully jQuery-ized
+* Templates stay in HTML where they belong and are valid (X)HTML 
+* Templates pull data from your JavaScript objects, including full object graphs
+* Easy iteration over arrays, conditional display of elements, dynamically skip sub-branches, modify attribute values, set contextual variables, attach template processing callbacks, "transclude" child templates, and much more
+* Processed templates are themselves templates and can be efficiently and repeatedly refilled
+* Easy to integrate with other frameworks like Backbone.js
+
+To familiarize yourself with the basic library and its usage, please read the original documentation at http://code.google.com/apis/jstemplate/docs/howto.html. Once you understand the basic concepts, refer to the following changes js-template.
+
+Last but not least, most of the credit for the power behind js-template goes to the original committers from Google. My work has been mainly to modernize the core template engine API, integrate it with jQuery, and sprinkle some additional features to make it useful in everyday production work.
+
+## Changes from the original JsTemplate project
 
 ### Namespacing
 
-I've put all the original JsTemplate code into the `GOOGLE.templates` namespace to avoid global collisions.
+I've put all the original JsTemplate code into the `GOOGLE.templates` namespace to avoid global namespace pollution.
 
 ### Added new public methods
 
-I've added several public methods to the `GOOGLE.templates` namespace to make using JsTemplate easier. However, these methods should not normally be used by the application in favor of using the jQuery integration instead. If interested, you can see these methods in the source.
+I've added several public methods to the `GOOGLE.templates` namespace to make using the raw JsTemplate engine easier. However, these methods should not normally be used by the application in favor of using jQuery integration instead. If interested, you can see these methods in the source.
 
 ### jQuery integration
 
-I've integrated into a properly namespaced jQuery plugin called `jquery-googlejst`, with a much simplified interface. It is now possible to use the standard ~$(...)~ selector syntax to find and process embedded templates.
+I've integrated the original engine into a properly namespaced jQuery plugin called `jquery-js-template`, with a much simplified interface. It is now possible to use the standard jQuery `$(...)` selector syntax to find and process templates.
 
 ### $(...).refillTemplate()
 
 ```javascript
-$(<selector for template DOM element>).refillTemplate(data, [parentData]);
+$(<selector for template DOM element(s)>).refillTemplate(data, [parentData]);
 ```
 
-Merges (and re-merges) template data with the selected template DOM node. The template DOM node will not be cloned; this merging occurs in-place. Data can be merged repeatedly and JsTemplate will find the differences and modify the DOM tree accordingly. It is preferable to use this technique, including in-place templates, because it allows for fast, real-time updates without cloning or destroying large segments of the DOM.
+Merges (and re-merges) template data with the selected template DOM node. The template DOM node will not be cloned; this merging occurs in-place. Data can be merged repeatedly and js-template will find the differences and modify the DOM tree accordingly. It is preferable to use this technique, including in-place templates, because it allows for fast, real-time updates without cloning or destroying large segments of the DOM.
 
-The data parameter is a normal JavaScript object whose properties will be used to fill the template with data. (Note, the value of this parameter will automatically be wrapped in a JsContext instance for use by JsTemplate if needed.)
+The data parameter is a normal JavaScript object whose properties will be used to fill the template with data. (Note, the value of this parameter will automatically be wrapped in a `JsContext` instance for use by JsTemplate if needed.)
 
-The parentData parameter is shared data that may be used as a secondary lookup. See the original JsTemplate documentation on advanced usage (http://code.google.com/apis/jstemplate/docs/advanced.html).
+The `parentData` parameter is shared data that may be used as a secondary lookup. See the original JsTemplate documentation on advanced usage (http://code.google.com/apis/jstemplate/docs/advanced.html).
 
 The return value is the processed template's DOM element. This element already exists in the DOM and any changes as a result of merging the data have already been rendered by the browser.
 
@@ -39,9 +51,9 @@ The return value is the processed template's DOM element. This element already e
 $(<selector for template DOM element>).fillTemplate(data, [parentData]);
 ```
 
-Clones the template and merges the data. The return value of the method (the cloned DOM element) must be attached somewhere in the DOM to make the processed template visible.  This method should be used when the template is stored in a separate DOM node that will be cloned and attached elsewhere in the DOM as needed. In general, it's preferable to use refillTemplate() when possible because it allows data to be merged repeatedly to the same DOM elements.
+Clones the template and merges the data. The return value of the method (the cloned DOM element) must be attached somewhere in the DOM to make the processed template visible.  This method should be used when the template is stored in a separate DOM node that will be cloned and attached elsewhere in the DOM as needed. In general, it's preferable to use `refillTemplate()` when possible because it allows data to be merged repeatedly to the same DOM elements.
 
-The data parameter is a normal JavaScript object whose properties will be used to fill the template with data. (Note, the value of this parameter will automatically be wrapped in a JsContext instance for use by JsTemplate if needed.)
+The data parameter is a normal JavaScript object whose properties will be used to fill the template with data. (Note, the value of this parameter will automatically be wrapped in a `JsContext` instance for use by JsTemplate if needed.)
 
 The `parentData` parameter is shared data that may be used as a secondary lookup. See the original JsTemplate documentation on advanced usage (http://code.google.com/apis/jstemplate/docs/advanced.html).
 
@@ -51,7 +63,7 @@ The return value is the processed and cloned template's DOM element. It must be 
 
 I found the original JsTemplate API difficult to use and remember (in addition to being non-XHTML compliant by polluting the HTML attribute namespace), so I've renamed key attributes and methods to make them more meaningful and stylistically consistent.
 
-First, all template-specific HTML attributes (like `jscontent` and `jsselect`) have been properly namespaced. JsTemplate will now not discover template attributes without a proper namespace declaration. The default namespace (without a namespace declaration in the HTML document) is "jst". Although using an alternative namespace is theoretically possible, it seems to be infeasible to discover what namespace is being used in Internet Explorer 8 or below, so for now, use the standard namespace of "jst".
+First, all template-specific HTML attributes (like `jscontent` and `jsselect`) have been properly namespaced. JsTemplate will now not discover template attributes without a proper namespace declaration. The default namespace (without a namespace declaration in the HTML document) is `jst`. Although using an alternative namespace is theoretically possible, it seems to be infeasible to discover what namespace is being used in Internet Explorer 8 or below, so for now, use the standard namespace of `jst`.
 
 To declare the JsTemplate namespace, attach the following attribute to the `<html>` or `<body>` element of the document:
 
@@ -67,34 +79,36 @@ The usage of these attributes then looks like the following:
 
 Here is a summary of all the JsTemplate attributes:
 
-#### `jst:content` (was `jscontent`)
+#### `jst:content`
 
-No changes. See original documentation
+Was `jscontent`. No changes. See original documentation
 
-#### `jst:select` (was `jsselect`)
+#### `jst:select`
 
-No changes. See original documentation
+Was `jsselect`. No changes. See original documentation
 
-#### `jst:if` (was `jsdisplay`)
+#### `jst:if`
 
-No changes. See original documentation.
+Was `jsdisplay`. No changes. See original documentation.
 
-#### `jst:include` (was `transclude`)
+#### `jst:include`
 
-No changes. See original documentation.
+Was `transclude`. No changes. See original documentation.
 
-`jst:values` (was `jsvalues`)
+#### `jst:values`
 
-Syntax has changed. Now, the pipe ("|") character is the expression separator rather than semicolon (";"), and the name/value separator is now equals ("=") rather than colon (":"). Example: `<option jst:values="value=$index|selected=($index===0)" ... >`.
+Was `jsvalues`. Syntax has changed. Now, the pipe ("|") character is the expression separator rather than semicolon (";"), and the name/value separator is now equals ("=") rather than colon (":"). Example: `<option jst:values="value=$index|selected=($index===0)" ... >`.
 
-#### `jst:vars` (was `jsvars`)
+#### `jst:vars`
 
-Same syntax change for `jst:values` noted above.
+Was `jsvars`. Same syntax change for `jst:values` noted above.
 
 #### `jst:eval`
+
 Was `jseval`. No changes. See original documentation.
 
 #### `jst:skip`
+
 Was `jsskip`. No changes. See original documentation.
 
 #### `jst:id`
@@ -109,7 +123,7 @@ Similar to `jst:id`, but eval's the attribute value as an expression. This attri
 
 Note that `jst:values` can also be used to set the element's `id` attribute, but this attribute helps simplify the use of `jst:values` for this common use case.
 
-Examples:
+Example:
 
 ```html
 <html ... xmlns:jst="http://code.google.com/p/google-jstemplate/">
