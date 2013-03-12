@@ -1,11 +1,9 @@
 js-template
 =========
 
-JsTemplate (http://code.google.com/p/google-jstemplate/) is a client-side JavaScript templating framework originally developed by Google. It has unique features such as the ability for authors to write templates in valid (X)HTML, and the ability to repeatedly (re)fill templates by determining and managing diffs to previously rendered template instances.
-   
-The original JsTemplate appears to no longer be under active development, and uses a number of undesirable patterns. I've updated and adapted the library in a number of ways described below.
+js-template is a powerful jQuery-based JavaScript templating framework. This project is an updated and modernized reincarnation of Google's original JsTemplate project (http://code.google.com/p/google-jstemplate/). js-template has unique features such as the ability for authors to write templates in valid (X)HTML, allowing validation and proper separation of view and controller logic, as well as the ability to repeatedly and efficiently (re)fill templates by determining and managing diffs to previously rendered template instances.
 
-To familiarize yourself with the basic library and its usage, please read the original documentation at http://code.google.com/apis/jstemplate/docs/howto.html. Once you understand the basic concepts, refer to the following changes for our version:
+To familiarize yourself with the basic library and its usage, please read the original documentation at http://code.google.com/apis/jstemplate/docs/howto.html. Once you understand the basic concepts, refer to the following changes js-template:
 
 ## Changes to JsTemplate
 
@@ -13,7 +11,7 @@ To familiarize yourself with the basic library and its usage, please read the or
 
 I've put all the original JsTemplate code into the `GOOGLE.templates` namespace to avoid global collisions.
 
-###Added new public methods
+### Added new public methods
 
 I've added several public methods to the `GOOGLE.templates` namespace to make using JsTemplate easier. However, these methods should not normally be used by the application in favor of using the jQuery integration instead. If interested, you can see these methods in the source.
 
@@ -21,7 +19,7 @@ I've added several public methods to the `GOOGLE.templates` namespace to make us
 
 I've integrated into a properly namespaced jQuery plugin called `jquery-googlejst`, with a much simplified interface. It is now possible to use the standard ~$(...)~ selector syntax to find and process embedded templates.
 
-### refillTemplate()
+### $(...).refillTemplate()
 
 ```javascript
 $(<selector for template DOM element>).refillTemplate(data, [parentData]);
@@ -35,7 +33,7 @@ The parentData parameter is shared data that may be used as a secondary lookup. 
 
 The return value is the processed template's DOM element. This element already exists in the DOM and any changes as a result of merging the data have already been rendered by the browser.
 
-### fillTemplate()
+### $(...).fillTemplate()
 
 ```javascript
 $(<selector for template DOM element>).fillTemplate(data, [parentData]);
@@ -62,6 +60,7 @@ To declare the JsTemplate namespace, attach the following attribute to the `<htm
 ```
 
 The usage of these attributes then looks like the following:
+
 ```html
 <div jst:select="someArray"><span jst:content="foo">Future value of foo</span></div>
 ```
@@ -72,7 +71,7 @@ Here is a summary of all the JsTemplate attributes:
 
 No changes. See original documentation
 
-### `jst:select` (was `jsselect`)
+#### `jst:select` (was `jsselect`)
 
 No changes. See original documentation
 
