@@ -17,7 +17,180 @@ To familiarize yourself with the basic library and its usage, please read the or
 
 Last but not least, most of the credit for the power behind js-template goes to the original committers from Google. My work has been mainly to modernize the core template engine API, integrate it with jQuery, and sprinkle some additional features to make it useful in everyday production work.
 
-## Changes from the original JsTemplate project
+# How to use js-template
+
+To use js-template in your page, you will need to do five things:
+
+* Include jQuery in your page,
+* Include js-template in your page,
+* Represent the data you want to display as a JavaScript object,
+* Define the template or templates that will display your data, and
+* Write JavaScript to fill templates and display the results in your document
+
+
+## Include jQuery in your page
+
+Include the latest version of jQuery before loading js-template.
+
+
+## Include js-template in your page
+
+```
+<script src="jquery-js-template.js" type="text/javascript"></script>
+```
+
+
+## JavaScript data
+
+A template can be used to display any JavaScript object, or graph of JavaScript objects. The template attributes determine how the object is mapped to an HTML representation. For a real application, the data may initially come from the server, either as JSON data or in some other format that will need to be translated into a JavaScript object representation. For the sake of simplicity, the examples in this document will initialize the data for template processing on the client-side by setting a variable. 
+
+Here is some sample data for the examples below:
+
+```javascript
+var favorites = {
+  title: "Favorite Things", 
+  favs: ["raindrops", "whiskers", "mittens"]
+};
+```
+
+## Defining templates
+
+Standard HTML is marked up as templates through the addition of special attributes to elements. A "template" is simply an HTML element on which at least one of these special attributes is defined, or an element containing descendants on which at least one of these attributes is defined. This approach has the advantage that all templates are valid (X)HTML and can be validated and processed by a variety of tools. 
+
+Here is a simple template:
+
+```html
+<div id="template1">
+  <h1 jst:content="title"></h1>
+  <ul>
+    <li jst:select="favs" jst:content="$this"></li>
+  </ul>
+</div>
+```
+   
+We call element `#template` a "template" because its children have the js-template attributes `jst:content` and
+`jst:select` as attributes.
+
+
+## Template processing
+
+We "fill" the template with this data like this:
+
+```javascript
+$("#template1").refillTemplate(favorites);
+```
+
+That's it! Here's how it works:
+
+* The `jst:content='title'` attribute instructs the template processor to use the property `title` as the content for the `h1` element. 
+* The `jst:select='favs'` attribute takes all the values of the `favs` array and iterates over them, copying the current element. 
+* The `jst:content='$this'` attribute takes the current object of the iteration, in this case a string, and uses it as the content of the element.
+
+The result of template processing is also a valid HTML template that preserves the attributes of the input template. Here is the result of processing the above template with our sample data:
+  
+```
+<div jst:cache="0" id="t1">
+  <h1 jst:cache="1" jst:content="title">Favorite Things</h1>
+  <ul jst:cache="0">
+    <li jst:instance="0" jst:cache="2" jst:select="favs" 
+        jst:content="$this">raindrops</li>
+    <li jst:instance="1" jst:cache="3" jst:select="favs" 
+        jst:content="$this">whiskers</li>
+    <li jst:instance="2" jst:cache="4" jst:select="favs" 
+        jst:content="$this">mittens</li>
+  </ul>
+</div>
+```
+
+In other words, the output of template processing is just another template. This capability allows js-template to reprocess the same template multiple times, and it's smart enough to efficiently handle complicated changes to the data like inserts and deletes.
+
+For example, a user might alter the underlying data by clicking a button, in which case we can immediately update the view by refilling the template:
+
+```javascript
+var favorites=...
+
+$("button.my-button").click(function onMyButtonClick(event) {
+  // Update the data
+  favorites.favs.push("packages");
+
+  // Refill the template
+  $("#template1").refillTemplate(favorites);
+});
+```
+
+Now the template becomes:
+
+```html
+  <div jst:cache="0" id="t1">
+    <h1 jst:cache="1" jst:content="title">Favorite Things</h1>
+    <ul jst:cache="0">
+      <li jst:instance="0" jst:cache="2" jst:select="favs" 
+          jst:content="$this">raindrops</li>
+      <li jst:instance="1" jst:cache="3" jst:select="favs" 
+          jst:content="$this">whiskers</li>
+      <li jst:instance="2" jst:cache="4" jst:select="favs" 
+          jst:content="$this">mittens</li>
+      <li jst:content="$this" jst:select="favs" jst:cache="5" 
+          jst:instance="3">packages</li>
+    </ul>
+  </div>
+```
+
+## More advanced templating
+
+Template HTML can appear anywhere in your document where you want to display your data, and it can even contain placeholder values that will be overwritten during template processing. This is very useful for mocking up static pages with placeholder data that will get templatized and filled later.
+
+A template can visibly appear in-place the page before it is processed, but it doesn't have to. If you will be reusing the same template in multiple places in a document, you can include a single hidden copy of the template and then use JavaScript to make new copies of its DOM node and place them in multiple locations. This way, templates become reusable components.
+
+In this case, we use the `fillTemplate()` function instead of `refillTemplate()`. The return value of `fillTemplate()` is the root element of the cloned and filled template that must be attached to the DOM to be visible:
+
+```html
+<!-- A container to hide our templates -->
+<div id="templates" style="display: none;">
+  <div id="template1">
+    <h1 jst:content="title"></h1>
+  </div>
+</div>
+...
+<!-- The element to which our template will be attached after filling -->
+<div id="peg">
+  <p>No content yet.</p>
+</div>
+```
+
+```javascript
+var favorites = ...
+
+// Clone a template element and fill it. Returns an unattached DOM element.
+var processedTemplate = $("#template1").fillTemplate(favorites);
+
+// Attach it to the DOM
+$("#peg")
+  .empty()
+  .append(processedTemplate);
+```
+
+One note about the `fillTemplate()` function: In the example above, the template contained an `id` attribute, which the HTML spec tell us must be unique with the entire DOM. Therefore, when cloning the template element, `fillTemplate()` removes any `id` attributes in the template so that the resulting template can then be attached to the DOM without causing problems. (See the documentation on the `jst:id` and `jst:idexpr` attributes for more information on providing a filled template with an `id` attribute.)
+
+Later, if you want to refill the already-placed template, you can just use `refillTemplate()` on `#peg`:
+
+```javascript
+var favorites = ...;
+
+favorites.favs.push("monkeys");
+
+$("peg")
+  .refillTemplate(favorites);
+```
+
+Of course, you don't have to refill a template with the same object it was originally filled with. You can make a copy of the data or use new data (say from an AJAX call) and refill just like above. The template will intelligently figure out the diffs in the data and display it properly.
+
+
+
+
+
+
+# Changes from the original JsTemplate project
 
 ### Namespacing
 
