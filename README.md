@@ -36,7 +36,7 @@ Include the latest version of jQuery before loading js-template.
 ## Include js-template in your page
 
 ```
-<script src="jquery-js-template.js" type="text/javascript"></script>
+<script src="jquery.js-template-1.0.js" type="text/javascript"></script>
 ```
 
 
