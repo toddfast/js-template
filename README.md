@@ -1,7 +1,7 @@
 js-template
 ===========
 
-js-template is a powerful jQuery-based JavaScript templating framework. This project is an updated and modernized reincarnation of Google's excellent [JsTemplate project](http://code.google.com/p/google-jstemplate/).
+js-template is a powerful jQuery-based JavaScript templating framework. This project is an updated and modernized reincarnation of Google's excellent open-source [JsTemplate project](http://code.google.com/p/google-jstemplate/).
 
 js-template has unique features and expressive power not found in other client-side templating frameworks:
 
