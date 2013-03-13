@@ -15,7 +15,7 @@ js-template has unique features and expressive power not found in other client-s
 
 To familiarize yourself with the basic library and its usage, please read the original documentation at http://code.google.com/apis/jstemplate/docs/howto.html. Once you understand the basic concepts, refer to the following changes js-template.
 
-Last but not least, most of the credit for the power behind js-template goes to the original committers from Google. My work has been mainly to modernize the core template engine API, integrate it with jQuery, and sprinkle some additional features to make it useful in everyday production work.
+Last but not least, most of the credit for the power behind js-template goes to Steffen Meschkat and the original committers from Google. My work has been mainly to modernize the core template engine API, integrate it with jQuery, and sprinkle some additional features to make it useful in everyday production work.
 
 # How to use js-template
 
