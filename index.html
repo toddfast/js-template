@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="js-template : Wickedly powerful jQuery + HTML5 templating" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>js-template</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/toddfast/js-template">View on GitHub</a>
+
+          <h1 id="project_title">js-template</h1>
+          <h2 id="project_tagline">Wickedly powerful jQuery + HTML5 templating</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/toddfast/js-template/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/toddfast/js-template/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p><em>js-template</em> is a powerful browser-side templating framework for jQuery + HTML5. It is an updated and modernized reincarnation of Google's excellent open-source <a href="http://code.google.com/p/google-jstemplate/">JsTemplate project</a>.</p>
+
+<p><em>js-template</em> has unique features and expressive power not found in other JavaScript templating frameworks:</p>
+
+<ul>
+<li>Templates stay in HTML where they belong! No funky syntax to learn—templates are valid HTML5.</li>
+<li>Both pre- and post-processed templates will validate.</li>
+<li>Fully jQuery-ized.</li>
+<li>Killer capabilities:
+
+<ul>
+<li>Reprocess templates again and again as data changes</li>
+<li>Use JavaScript expressions to derive displayable content</li>
+<li>Iterate easily over arrays</li>
+<li>Conditionally display or skip elements</li>
+<li>Modify DOM attributes</li>
+<li>Use contextual variables during processing</li>
+<li>Attach function callbacks</li>
+<li>"transclude" child templates</li>
+<li>and much more.</li>
+</ul>
+</li>
+<li>Easy to integrate with other frameworks like Backbone.js</li>
+<li>Supported in practically all browsers (even back to IE6 &amp; FF3), including mobile browsers</li>
+<li>Unmatched power weighing in at only ~10.5KB minified and ~3.5KB gzipped</li>
+</ul><p>Here is a trivial example of using <em>js-template</em>:</p>
+
+<div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">"myTemplate"</span><span class="nt">&gt;</span>Hello, <span class="nt">&lt;span</span> <span class="na">data-jst-content=</span><span class="s">"who"</span><span class="nt">&gt;&lt;/span&gt;</span>!<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;script&gt;</span>
+<span class="nx">$</span><span class="p">(</span><span class="s2">"#myTemplate"</span><span class="p">).</span><span class="nx">refillTemplate</span><span class="p">({</span> <span class="nx">who</span><span class="o">:</span> <span class="s2">"World"</span> <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+
+<p>which results in:</p>
+
+<div class="highlight"><pre>Hello, World!
+</pre></div>
+
+<p>And filled templates remain valid templates. You can just refill them again with different data:</p>
+
+<div class="highlight"><pre><span class="nt">&lt;script&gt;</span>
+<span class="nx">$</span><span class="p">(</span><span class="s2">"#myTemplate"</span><span class="p">).</span><span class="nx">refillTemplate</span><span class="p">({</span> <span class="nx">who</span><span class="o">:</span> <span class="s2">"dude"</span> <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+
+<p>which results in:</p>
+
+<div class="highlight"><pre>Hello, dude!
+</pre></div>
+
+<p>There's far, far more template-y goodness than this waiting for you! <a href="https://github.com/toddfast/js-template">Go check out the full <em>js-template</em> documentation on GitHub.</a></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">js-template maintained by <a href="https://github.com/toddfast">toddfast</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
