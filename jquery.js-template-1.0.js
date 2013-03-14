@@ -2255,7 +2255,7 @@ GOOGLE.templates=(function(jQuery) {
 		__jsEval: jsEval,
 
 		// Alias for function JsEvalContext(opt_data, opt_parent)
-		//		EvalContext: JsEvalContext,
+		//	EvalContext: JsEvalContext,
 
 		// Alias for function JsTemplate(elem,true)
 		ClonedTemplate: function(element) {

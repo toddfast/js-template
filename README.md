@@ -172,6 +172,7 @@ Now the template becomes:
 </div>
 ```
 
+
 ## More advanced templating
 
 #### Placeholder values
