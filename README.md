@@ -1,15 +1,15 @@
- *js-template* 
+js-template
 ===========
 
 *js-template* is a powerful jQuery-based JavaScript templating framework. This project is an updated and modernized reincarnation of Google's excellent open-source [JsTemplate project](http://code.google.com/p/google-jstemplate/).
 
 *js-template* has unique features and expressive power not found in other client-side templating frameworks:
 
-* HTML5-ready
+* Templates stay in HTML where they belong!
+* Templates are themselves valid HTML5. Both pre- and post-processed pages with templates will validate.
 * Fully jQuery-ized
-* Templates stay in HTML where they belong, and are valid HTML5
-* Templates pull data from your JavaScript objects, including full object graphs
-* Easy iteration over arrays, conditional display of elements, dynamically skip sub-branches, modify attribute values, set contextual variables, attach template processing callbacks, "transclude" child templates, and much more
+* Templates declaratively pull data from your JavaScript objects, including complex object graphs
+* Easy iteration over arrays, conditional display of template elements, dynamically skip sub-branches, modify attribute values, set contextual variables, attach template processing callbacks, "transclude" child templates, and much more
 * Processed templates are themselves templates and can be efficiently and repeatedly refilled
 * Easy to integrate with other frameworks like Backbone.js
 * Supported in practically all browsers (even back to IE6 & FF3), including mobile browsers
@@ -18,15 +18,15 @@ To familiarize yourself with the basic library and its usage, please read the or
 
 Last but not least, most of the credit for the power behind *js-template* goes to Steffen Meschkat and the original committers from Google. My work has been mainly to modernize the core template engine API, integrate it with jQuery, and sprinkle some additional features to make it useful in everyday production work.
 
-# How to use js-template
+# How to use *js-template*
 
 To use *js-template* in your page, you will need to do five things:
 
 1. Include jQuery in your page,
 1. Include *js-template* in your page,
-1. Represent the data you want to display as a JavaScript object,
-1. Define the template or templates that will display your data, and
-1. Write JavaScript to fill templates and display the results in your document
+1. Define your data in JavaScript,
+1. Define your templates in HTML, and
+1. Process the templates to fill them with data
 
 
 ## 1. Include jQuery in your page
@@ -38,13 +38,13 @@ Include the latest version of jQuery 1.x before loading *js-template*. For examp
 ```
 
 
-## 2. Include js-template in your page
+## 2. Include *js-template* in your page
 
 ```html
 <script src="jquery.js-template-1.0.js" type="text/javascript"></script>
 ```
 
-## 3. JavaScript data
+## 3. Define your data in JavaScript
 
 A template can be used to display any JavaScript object, or graph of JavaScript objects. The template attributes determine how the object is mapped to an HTML representation. For a real application, the data may initially come from the server, either as JSON data or in some other format that will need to be translated into a JavaScript object representation. For the sake of simplicity, the examples in this document will initialize the data for template processing on the client-side by setting a variable. 
 
@@ -57,7 +57,7 @@ var favorites = {
 };
 ```
 
-## 4. Define templates
+## 4. Define your templates in HTML
 
 Standard HTML is marked up as templates through the addition of special attributes to elements. A "template" is simply an HTML element on which at least one of these special attributes is defined, or an element containing descendants on which at least one of these attributes is defined. This approach has the advantage that all templates are valid (X)HTML and can be validated and processed by a variety of tools. 
 
@@ -76,9 +76,9 @@ We call element `#template` a "template" because its children have the *js-templ
 `data-jst-select` as attributes.
 
 
-## 5. Process templates
+## 5. Process the templates
 
-We fill the template with this data like this:
+We fill a template with data like this:
 
 ```javascript
 $("#template1").refillTemplate(favorites);
@@ -106,9 +106,9 @@ The result of template processing is also a valid HTML template that preserves t
 </div>
 ```
 
-(Notice some new attributes, like `data-jst-__cache` and `data-jst-__instance`, which were added by the template processor to track reprocessing of the template. You can ignore these implementation-specific details.)
+(Notice some new attributes, like `data-jst-__cache` and `data-jst-__instance`, which were added by the template processor to track reprocessing of the template. You can ignore these implementation-specific details. They are included here so that you're not surprised the first time you look at your processed template output.)
 
-All this is to say that the output of template processing is just another template. This capability allows *js-template* to reprocess the same template multiple times, and it's smart enough to efficiently handle complicated changes to the data like inserts and deletes.
+**All this is to say that the output of template processing is just another template!** This capability allows *js-template* to reprocess the same template multiple times, and it's smart enough to efficiently handle complicated changes to the data like inserts and deletes.
 
 For example, a user might alter the underlying data by clicking a button, in which case we can immediately update the view by refilling the template:
 
@@ -142,7 +142,7 @@ Now the template becomes (eliding the various `data-jst-__*` attributes):
 
 Template HTML can appear anywhere in your document where you want to display your data, and it can even contain placeholder values that will be overwritten during template processing. This is very useful for mocking up static pages with placeholder data that will get templatized and filled later.
 
-A template can visibly appear in-place the page before it is processed, but it doesn't have to. If you will be reusing the same template in multiple places in a document, you can include a single hidden copy of the template and then use JavaScript to make new copies of its DOM node and place them in multiple locations. This way, templates become reusable components.
+A template can visibly appear in-place, anywyere in the page, before it is processed, but it doesn't have to. If you will be reusing the same template in multiple places in a document, you can include a single hidden copy of the template and then use JavaScript to make new copies of its DOM node and place them in multiple locations. This way, templates become reusable components.
 
 In this case, we use the `fillTemplate()` function instead of `refillTemplate()`. The return value of `fillTemplate()` is the root element of the cloned and filled template that must be attached to the DOM to be visible:
 
@@ -168,7 +168,7 @@ var processedTemplate = $("#template1").fillTemplate(favorites);
 
 // Attach it to the DOM
 $("#container")
-  .empty()
+  .empty() // Remove the child <p>
   .append(processedTemplate);
 ```
 
@@ -225,11 +225,10 @@ $(<selector for template DOM element(s)>).refillTemplate(data [,parentData]);
 
 Merges (and re-merges) template data with the selected template DOM node. The template DOM node will not be cloned; this merging occurs in-place. Data can be merged repeatedly and *js-template* will find the differences and modify the DOM tree accordingly. It is preferable to use this technique, including in-place templates, because it allows for fast, real-time updates without cloning or destroying large segments of the DOM.
 
-The `data` parameter is a normal JavaScript object whose properties will be used to fill the template with data.
+* The `data` parameter is a normal JavaScript object whose properties will be used to fill the template with data.
+* The `parentData` parameter is shared data that may be used as a secondary lookup.
+* The return value is the processed template's DOM element. This element already exists in the DOM and any changes as a result of merging the data have already been rendered by the browser.
 
-The `parentData` parameter is shared data that may be used as a secondary lookup.
-
-The return value is the processed template's DOM element. This element already exists in the DOM and any changes as a result of merging the data have already been rendered by the browser.
 
 ### fillTemplate()
 
@@ -237,13 +236,19 @@ The return value is the processed template's DOM element. This element already e
 $(<selector for template DOM element>).fillTemplate(data [,parentData]);
 ```
 
-Clones the template, including all its event handlers, and merges the data. The return value of the method (the cloned DOM element) must be attached somewhere in the DOM to make the processed template visible.  This method should be used when the template is stored in a separate DOM node that will be cloned and attached elsewhere in the DOM as needed. In general, it's preferable to use `refillTemplate()` when possible because it allows data to be merged repeatedly to the same DOM elements.
+Clones the template, including all its event handlers, and merges the data. The return value of the method (the cloned DOM element) must be attached somewhere in the DOM to make the processed template visible.
 
-The `data` parameter is a normal JavaScript object whose properties will be used to fill the template with data.
+* The `data` parameter is a normal JavaScript object whose properties will be used to fill the template with data.
+* The `parentData` parameter is shared data that may be used as a secondary lookup.
+* The return value is the processed and cloned template's DOM element. It must be attached to the DOM in order to be visible.
 
-The `parentData` parameter is shared data that may be used as a secondary lookup.
+This method should be used when the template is stored in a separate DOM node that will be cloned and attached elsewhere in the DOM as needed. In general, it's preferable to use `refillTemplate()` when possible because it allows data to be merged repeatedly to the same DOM elements.
 
-The return value is the processed and cloned template's DOM element. It must be attached to the DOM in order to be visible.
+#### Handling `id`s
+
+When cloning a template element, `fillTemplate()` removes any `id` attributes in the cloned template so that it can then be attached to the DOM without causing `id` conflicts (in HTML, only one element can have a unique `id` value within the DOM). See the documentation on the `data-jst-id` and `data-jst-idexpr` attributes for more information on providing a cloned template with an `id` attribute.
+
+#### Cloned event handlers
 
 Because cloned templates retain all of their attached event handlers and callback functions, you can efficiently attach event handlers to the template once in $(document).ready() and those event handlers will then be used for all instances of the template.
 
@@ -301,8 +306,6 @@ $(<selector for template DOM element>).templateCallback(data [,parentData]);
 
 Template callbacks are functions that are called as the corresponding nodes in the template are processed. They are extermely useful for tracking template processing from your page's script, for example inspecting data, modifying template processing, setting attributes and data, and so on.
 
-template, this.vars_, this.data_
-
 ```html
 <div id="template">
   <div class="row" data-jst-select="favs" data-jst-content="$this"></div>
@@ -320,16 +323,11 @@ $(document).ready(function () {
 });
 ```
 
-A callback function is called with the following:
+A callback function is called with the following environment:
 
 * `this` is a reference to the current DOM element being processed
-* `vars` parameter is an object containing all the variables available to `data-jst-vars` (and `data-jst-values`) attribute expressions:
-    * `$index`: The current index of the array being iterated over during `data-jst-select` processing
-    * `$length`: The length of the current array being iterated over during `data-jst-select` processing
-    * `$this`: The current data value being processed for this node
-    * `$top`: The top data context, i.e. the object that was passed to `(re)fillTemplate()`
-    * `$context`: The root instance of `JsContext` being used for template processing. (Advanced topic; see source code for more info)
-* `data` parameter is the current data value being processed for this node. It is the same object as the `$this` variable used inside the template, or the `vars.$this` property in the callback.
+* The `vars` parameter is an object containing all the variables available to `data-jst-vars` (and `data-jst-values`) attribute expressions. See the **Template processing environment** section below for the list of available variables.
+* The `data` parameter contains the current data value being processed for this node. It is the same object as the `$this` variable used inside the template, or the `vars.$this` property in the callback.
 
 Only a single template callback function can be attached to any given element at a time.
 
@@ -342,17 +340,16 @@ $(<selector for template DOM element>).removeTemplateCallback();
 Detaches the template callback function from the selected elements so that it will no longer be called during template processing.
 
 
-## Template processing Environment
+## Template processing environment
 
-With the exception of the `data-jst-include` instruction, the values of all *js-template* attributes will contain JavaScript expressions. These expressions will be evaluated in an environment that includes bindings from a variety of sources, and names defined by any of these sources can be referenced in *js-template* attribute expressions as if they were variables:
+With the exception of the `data-jst-include` instruction, the values of all *js-template* attributes will contain JavaScript expressions. These expressions will be evaluated in an environment that includes the following:
 
-* All the properties of the `JsEvalContext`'s data object are included in the processing environment.
-* Explicitly declared variables: The `setVariable(name,value)` method of `JsEvalContext` creates a new variable with the name `variableName` in the processing environment if no such variable exists, assigning it the value `variableValue`. If the variable already exists, it will be reassigned the value `variableValue`. Variables can also be created and assigned with the `data-jst-values` instruction (see below).
-    * Note that variables defined in either of these ways are distinct from the `JsEvalContext` data object. Calling `setVariable` will not alter the data wrapped by the `JsEvalContext` instance. This fact can have important consequences when template processing is traversing the hierarchy of the data object (through the use of the `data-jst-select` instruction, for example -- see below): no matter what portion of the data hierarchy has been selected for processing, variables created with `setVariable` will always be available for use in template processing instructions.
-* Special variables: *js-template* also defines three special variables that can be used in processing instruction attributes:
-  * `this`: The keyword `this` in *js-template* attribute expressions will evaluate to the element on which the attribute is defined. In this respect *js-template* attributes mirror event handler attributes like `onclick`. 
-  * `$index`: Array-valued data can result in a duplicate template node being created for each array element (see `data-jst-select`, below). In this case the processing environment for each of those nodes includes `$index` variable, which will contain the array index of the element associated with the node. 
-  * `$this`: `$this` refers to the context data object used in processing the current node. So in the above example we could substitute `$this.end` for `end` without changing the meaning of the `data-jst-content` expression. This may not seem like a very useful thing to do in this case, but there are other cases in which `$this` is necessary. If the data context contains a value such as a string or a number rather than an object with named properties, there is no way to retrieve the value using object-property notation, and so we need `$this` to access the value.
+* `this`: Evaluates to the element on which the attribute is defined. In this respect *js-template* attributes mirror event handler attributes like `onclick`. 
+* `$this`: The current context data object used in processing the current node
+* `$index`: The current index of the array being iterated over during `data-jst-select` processing
+* `$length`: The length of the current array being iterated over during `data-jst-select` processing
+* `$top`: The top data context, i.e. the object that was passed to `(re)fillTemplate()`
+* `$context`: The root instance of `JsContext` being used for template processing. (Advanced topic; see source code for more info)
 
 So if you have the template:
 
@@ -370,7 +367,7 @@ var mydata = {dataProperty: "Nonny"};
 var context = {declaredVar, "Ho"};
 $("#witha").refillTemplate(mydata,context);
 ```
-then the document will display the string `withaHeyNonnyNonnyHo`. The values of `id` and `parentNode.id` are available as properties of the current node (accessible through the keyword `this`), the value of `dataProperty` is available (via both a naked reference and the special variable `$this`) because it is defined in the context data object, and the value of `declaredVar` is available because it is defined in the context's variables.
+then the document will display the string "withaHeyNonnyNonnyHo". The values of `id` and `parentNode.id` are available as properties of the current node (accessible through the keyword `this`), the value of `dataProperty` is available (via both a naked reference and the special variable `$this`) because it is defined in the context data object, and the value of `declaredVar` is available because it is defined in the context's variables.
 
 
 ## Template attributes
