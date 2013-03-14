@@ -538,12 +538,10 @@ GOOGLE.templates=function(jQuery) {
 	 * attributes.
 	 */
 	var VAR_index = '$index';
-	var VAR_count = '$count';
+	var VAR_count = '$length';
 	var VAR_this = '$this';
 	var VAR_context = '$context';
 	var VAR_top = '$top';
-	// TAF
-	var VAR_length = '$length';
 
 
 	/**
@@ -624,17 +622,6 @@ GOOGLE.templates=function(jQuery) {
 	   * @type Object
 	   */
 	  me.vars_[VAR_this] = opt_data;
-
-
-	  /**
-	   * TAF: 
-	   * Automatically create the $length var to avoid cluttering templates
-	   * with this comon use case
-	   */
-// TAF: This doesn't work as expected, apparently because of the creation of
-// multiple JsEvalContexts in a way I don't yet understand.
-//	  me.vars_[VAR_length] =
-//		  isArray(opt_data) ? opt_data.length : (opt_data ? 1 : 0) ;
 
 	  /**
 	   * The entire context structure is exposed as a variable so it can be
@@ -1178,8 +1165,6 @@ GOOGLE.templates=function(jQuery) {
 	var JST_ATTRIBUTES = [
 	    [ ATT_select, jsEvalToFunction ],
 	    [ ATT_display, jsEvalToFunction ],
-	    [ ATT_hide, jsEvalToFunction ],
-	    [ ATT_show, jsEvalToFunction ],
 	    [ ATT_values, jsEvalToValues ],
 	    [ ATT_vars, jsEvalToValues ],
 	    [ ATT_eval, jsEvalToExpressions ],
@@ -1187,6 +1172,8 @@ GOOGLE.templates=function(jQuery) {
 	    [ ATT_content, jsEvalToFunction ],
 	    [ ATT_skip, jsEvalToFunction ],
 		// TAF
+	    [ ATT_hide, jsEvalToFunction ],
+	    [ ATT_show, jsEvalToFunction ],
 	    [ ATT_id, jsEvalToSelf ],
 	    [ ATT_idexpr, jsEvalToFunction ],
 	    [ ATT_overwrite, jsEvalToSelf ],
@@ -1502,30 +1489,6 @@ GOOGLE.templates=function(jQuery) {
 	    displayDefault(template);
 	  }
 
-	  // TAF
-	  var show = jstAttributes[ATT_show];
-	  if (show) {
-	    var shouldShow = context.jsexec(show, template);
-	    if (MAPS_DEBUG && me.debugging_) {
-	      me.logs_.push(ATT_show + ': ' + shouldShow + '<br/>');
-	    }
-	    if (shouldShow) {
-	      displayDefault(template);
-	    }
-	  }
-
-	  // TAF
-	  var hide = jstAttributes[ATT_hide];
-	  if (hide) {
-	    var shouldHide = context.jsexec(hide, template);
-	    if (MAPS_DEBUG && me.debugging_) {
-	      me.logs_.push(ATT_hide + ': ' + shouldHide + '<br/>');
-	    }
-	    if (shouldHide) {
-	      displayNone(template);
-	    }
-	  }
-
 	  // NOTE(mesch): jsvars is evaluated before jsvalues, because it's
 	  // more useful to be able to use var values in attribute value
 	  // expressions than vice versa.
@@ -1572,6 +1535,30 @@ GOOGLE.templates=function(jQuery) {
 	  if (expressions) {
 	    for (var i = 0, I = jsLength(expressions); i < I; ++i) {
 	      context.jsexec(expressions[i], template);
+	    }
+	  }
+
+	  // TAF
+	  var show = jstAttributes[ATT_show];
+	  if (show) {
+	    var shouldShow = context.jsexec(show, template);
+	    if (MAPS_DEBUG && me.debugging_) {
+	      me.logs_.push(ATT_show + ': ' + shouldShow + '<br/>');
+	    }
+	    if (shouldShow) {
+	      displayDefault(template);
+	    }
+	  }
+
+	  // TAF
+	  var hide = jstAttributes[ATT_hide];
+	  if (hide) {
+	    var shouldHide = context.jsexec(hide, template);
+	    if (MAPS_DEBUG && me.debugging_) {
+	      me.logs_.push(ATT_hide + ': ' + shouldHide + '<br/>');
+	    }
+	    if (shouldHide) {
+	      displayNone(template);
 	    }
 	  }
 
@@ -1886,7 +1873,7 @@ GOOGLE.templates=function(jQuery) {
 	  }
 
 	  // TAF: Allow preservation of existing text if value is null by
-	  // specifying jst:overwrite=true
+	  // specifying jst:overwrite=false
 	  var overwrite = jstAttributes[ATT_overwrite];
 
 	  var clearContents=true;
@@ -2235,7 +2222,7 @@ GOOGLE.templates=function(jQuery) {
 		return this.template(data,true,parentData);
 	};
 
-	jQuery.fn.templateFunction = function(fn) {
+	jQuery.fn.templateCallback = function(fn) {
 		var functionArray=[fn];
 		this.each(function(index, element) {
 			jQuery(this).data(JSTFN_DATA,functionArray);
@@ -2243,7 +2230,7 @@ GOOGLE.templates=function(jQuery) {
 		return this;
 	};
 
-	jQuery.fn.removeTemplateFunction = function(fn) {
+	jQuery.fn.unbindTemplateCallback = function(fn) {
 		this.each(function(index, element) {
 			jQuery(element).removeData(JSTFN_DATA);
 		});
