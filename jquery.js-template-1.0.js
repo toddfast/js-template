@@ -1,6 +1,6 @@
 /*
- * @projectDescription js-template jQuery plugin
- * @author Todd Fast, Google (Steffen Meschkat)
+ * @projectDescription js-template - JavaScript templates
+ * @author Google (Steffen Meschkat), Todd Fast
  * @version 1.0
  * @website: https://github.com/toddfast/js-template
  * @license: Apache
@@ -19,6 +19,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
 // implied. See the License for the specific language governing
 // permissions and limitations under the License.
+
 /**
  * Author: Steffen Meschkat <mesch@google.com>
  *
@@ -36,57 +37,18 @@
  */
 
 
-var GOOGLE = {};
-GOOGLE.templates=function() {
+var GOOGLE = GOOGLE || {};
+GOOGLE.templates=function(jQuery) {
 
 	var log = function(msg) {
-		if (window.console)
+		if (window.console) {
 			window.console.log(msg);
+		}
 	}
 
 	// TAF
-	var DEFAULT_JST_ATTRIBUTE_NAMESPACE;
-	var JST_ATTRIBUTE_NAMESPACE=DEFAULT_JST_ATTRIBUTE_NAMESPACE;
-	var JST_ATTRIBUTE_NAMESPACE_URI="http://code.google.com/p/google-jstemplate/";
-	var JSTFN_DATA="jst:fn";
-
-	// Include this attribute on <html> or <body> element to customize the
-	// namespace prefix, where t is any valid namespace prefix:
-	// 	   xmlns:t="http://code.google.com/p/google-jstemplate/"
-
-	// Detect the namespace
-	function findNamespacePrefix(element) {
-		try {
-			var namespaces=element.attributes;
-			for (i=0; i<namespaces.length; i++) {
-				if (namespaces[i].value==JST_ATTRIBUTE_NAMESPACE_URI) {
-					// Namespace should be of form "xmlns:abc" where abc is the
-					// attribute prefix we want to extract
-					return namespaces[i].name.split(":")[1];
-				}
-			}
-		}
-		catch (e) {
-			log(e);
-		}
-
-
-		return null;
-	}
-
-	// IMPORTANT!
-	// Right now, IE 8 and below don't return namespace declarations
-	// as attributes, so there is seemingly no way to detect the prefix.
-	// This means that the only option is to use the default prefix until
-	// some fix comes along or I discover a compatible way to detect the prefix.
-	if (!JST_ATTRIBUTE_NAMESPACE)
-		JST_ATTRIBUTE_NAMESPACE=findNamespacePrefix(document.documentElement);
-	if (!JST_ATTRIBUTE_NAMESPACE)
-		JST_ATTRIBUTE_NAMESPACE=findNamespacePrefix(document.body);
-	if (!JST_ATTRIBUTE_NAMESPACE)
-		JST_ATTRIBUTE_NAMESPACE="jst";
-
-
+	var JST_ATTRIBUTE_NAMESPACE="data-jst-";
+	var JSTFN_DATA=JST_ATTRIBUTE_NAMESPACE+"fn";
 
 ////////////////////////////////////////////////////////////////////////////////
 // utils.js
@@ -1017,41 +979,41 @@ GOOGLE.templates=function() {
 //	var ATT_skip = 'jsskip';
 
 	// TAF
-	var ATT_select = JST_ATTRIBUTE_NAMESPACE+':select';
-	var ATT_instance = JST_ATTRIBUTE_NAMESPACE+':instance';
-	var ATT_display = JST_ATTRIBUTE_NAMESPACE+':if';
-	var ATT_hide = JST_ATTRIBUTE_NAMESPACE+':hide';
-	var ATT_show = JST_ATTRIBUTE_NAMESPACE+':show';
-	var ATT_values = JST_ATTRIBUTE_NAMESPACE+':values';
-	var ATT_vars = JST_ATTRIBUTE_NAMESPACE+':vars';
-	var ATT_eval = JST_ATTRIBUTE_NAMESPACE+':eval';
-	var ATT_transclude = JST_ATTRIBUTE_NAMESPACE+':include';
-	var ATT_content = JST_ATTRIBUTE_NAMESPACE+':content';
-	var ATT_skip = JST_ATTRIBUTE_NAMESPACE+':skip';
-	var ATT_id = JST_ATTRIBUTE_NAMESPACE+':id';
-	var ATT_idexpr = JST_ATTRIBUTE_NAMESPACE+':idexpr';
-	var ATT_overwrite = JST_ATTRIBUTE_NAMESPACE+':overwrite';
-	var ATT_data = JST_ATTRIBUTE_NAMESPACE+':data';
+	var ATT_select = JST_ATTRIBUTE_NAMESPACE+'select';
+	var ATT_instance = JST_ATTRIBUTE_NAMESPACE+'__instance';
+	var ATT_display = JST_ATTRIBUTE_NAMESPACE+'if';
+	var ATT_hide = JST_ATTRIBUTE_NAMESPACE+'hide';
+	var ATT_show = JST_ATTRIBUTE_NAMESPACE+':how';
+	var ATT_values = JST_ATTRIBUTE_NAMESPACE+':alues';
+	var ATT_vars = JST_ATTRIBUTE_NAMESPACE+'vars';
+	var ATT_eval = JST_ATTRIBUTE_NAMESPACE+'eval';
+	var ATT_transclude = JST_ATTRIBUTE_NAMESPACE+'include';
+	var ATT_content = JST_ATTRIBUTE_NAMESPACE+'content';
+	var ATT_skip = JST_ATTRIBUTE_NAMESPACE+'skip';
+	var ATT_id = JST_ATTRIBUTE_NAMESPACE+'id';
+	var ATT_idexpr = JST_ATTRIBUTE_NAMESPACE+'idexpr';
+	var ATT_overwrite = JST_ATTRIBUTE_NAMESPACE+'overwrite';
+	var ATT_data = JST_ATTRIBUTE_NAMESPACE+'data';
 
 
 	/**
 	 * Name of the attribute that caches a reference to the parsed
 	 * template processing attribute values on a template node.
 	 */
-	var ATT_jstcache = JST_ATTRIBUTE_NAMESPACE+':tcache';
+	var ATT_jstcache = JST_ATTRIBUTE_NAMESPACE+'__tcache';
 
 
 	/**
 	 * Name of the property that caches the parsed template processing
 	 * attribute values on a template node.
 	 */
-	var PROP_jstcache = '__jstcache';
+	var PROP_jstcache = JST_ATTRIBUTE_NAMESPACE+'__cache';
 
 
 	/**
 	 * ID of the element that contains dynamically loaded jstemplates.
 	 */
-	var STRING_jsts = 'jsts';
+	var STRING_jsts = 'js-templates';
 
 
 	/**
@@ -1822,8 +1784,7 @@ GOOGLE.templates=function() {
 	    var label = values[i];
 	    var value = context.jsexec(values[i+1], template);
 
-//		SITE.log("jst:data :",template,"label:",label,"value:",value);
-
+	    // TAF
 		jQuery(template).data(label,value);
 	  }
 	};
@@ -1959,7 +1920,6 @@ GOOGLE.templates=function() {
 	  // TAF: Simply let jQuery handle the insertion
 //	  if (value || (value==null && !ignoreEmpty)) {
 	  if (clearContents) {
-//SITE.log("Setting template value",template,value);
 		  jQuery(template).append(value);
 	  }
 	};
@@ -2208,7 +2168,6 @@ GOOGLE.templates=function() {
 				}
 			}
 			else {
-//				context=JsEvalContext.create({});
 				context=JsEvalContext.create();
 				created=true;
 			}
@@ -2216,27 +2175,31 @@ GOOGLE.templates=function() {
 			jstProcess(context,template,inplace,opt_debugging);
 		}
 		finally {
-			if (created)
+			if (created) {}
 				JsEvalContext.recycle(context);
+			}
 
-			if (createdParent)
+			if (createdParent) {
 				JsEvalContext.recycle(parentContext);
+			}
 		}
 	}
 
 
-	function JsTemplate(elem,inplace) {
-		if (!(this instanceof arguments.callee))
+	function JsTemplate(elem, inplace) {
+		if (!(this instanceof arguments.callee)) {
 			throw Error("Constructor called as a function; "+
 				"create a new instance instead");
+		}
 
 		this.element=elem;
 		this.inplace=inplace ? inplace : false;
 	}
 
 	JsTemplate.prototype.process = function(context) {
-		if (this.element)
+		if (this.element) {
 			processTemplate(context,this.element,null,inplace,false);
+		}
 	};
 
 
@@ -2249,10 +2212,12 @@ GOOGLE.templates=function() {
 			function(index,element) {
 				var template;
 
-				if (inplace)
+				if (inplace) {
 					template=element;
-				else
+				}
+				else {
 					template=jstCloneTemplate(element);
+				}
 
 				if (template) {
 					processTemplate(data,template,parentData,inplace,false);
@@ -2273,14 +2238,14 @@ GOOGLE.templates=function() {
 	jQuery.fn.templateFunction = function(fn) {
 		var functionArray=[fn];
 		this.each(function(index, element) {
-			$(this).data(JSTFN_DATA,functionArray);
+			jQuery(this).data(JSTFN_DATA,functionArray);
 		});
 		return this;
 	};
 
 	jQuery.fn.removeTemplateFunction = function(fn) {
 		this.each(function(index, element) {
-			$(element).removeData(JSTFN_DATA);
+			jQuery(element).removeData(JSTFN_DATA);
 		});
 		return this;
 	};
@@ -2330,4 +2295,4 @@ GOOGLE.templates=function() {
 			return new this.ClonedTemplate(element);
 		}
 	}
-}();
+}(jQuery);
