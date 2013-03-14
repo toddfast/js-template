@@ -9,8 +9,8 @@ js-template
 * Both pre- and post-processed templates will validate.
 * Fully jQuery-ized.
 * Killer capabilities:
-  * Reprocess templates again and again
-  * Use JavaScript expressions to derive new values
+  * Reprocess templates again and again as data changes
+  * Use JavaScript expressions to derive displayable content
   * Iterate easily over arrays
   * Conditionally display or skip elements
   * Modify DOM attributes
@@ -129,7 +129,7 @@ That's it! Here's how it works:
 
 The result of template processing is also a valid HTML template that preserves the attributes of the input template. Here is the result of processing the above template with our sample data:
   
-```
+```html
 <div id="template1">
   <h1 data-jst-content="title">Favorite Things</h1>
   <ul>
@@ -235,7 +235,7 @@ Of course, you don't have to refill a template with the same object it was origi
 
 # Reference
 
-There are four primary jQuery nethods in *js-template*:
+There are four primary jQuery methods in *js-template*:
 
 * `refillTemplate()`
 * `fillTemplate()`
