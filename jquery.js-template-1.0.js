@@ -38,7 +38,7 @@
 
 
 var GOOGLE = GOOGLE || {};
-GOOGLE.templates=function(jQuery) {
+GOOGLE.templates=(function(jQuery) {
 
 	var log = function(msg) {
 		if (window.console) {
@@ -2144,7 +2144,7 @@ GOOGLE.templates=function(jQuery) {
 		try {
 			// Automatically wrap so caller doesn't always need to do it
 			if (context) {
-				if (parentContext && !(parentContext instanceof JsEvalContext)){
+				if (parentContext && !(parentContext instanceof JsEvalContext)) {
 					parentContext=JsEvalContext.create(parentContext);
 					createdParent=true;
 				}
@@ -2162,7 +2162,7 @@ GOOGLE.templates=function(jQuery) {
 			jstProcess(context,template,inplace,opt_debugging);
 		}
 		finally {
-			if (created) {}
+			if (created) {
 				JsEvalContext.recycle(context);
 			}
 
@@ -2242,7 +2242,7 @@ GOOGLE.templates=function(jQuery) {
 // Public functions
 ////////////////////////////////////////////////////////////////////////////////
 
-	return {
+	var exports={
 
 		// Alias for function jsEval(...)
 		// Only needed for testing with jstemplate_example.html
@@ -2281,5 +2281,8 @@ GOOGLE.templates=function(jQuery) {
 			var element=jstGetTemplate(id);
 			return new this.ClonedTemplate(element);
 		}
-	}
-}(jQuery);
+	};
+
+	return exports;
+
+})(jQuery);
