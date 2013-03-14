@@ -3,7 +3,7 @@ js-template
 
 *js-template* is a powerful jQuery-based JavaScript templating framework. This project is an updated and modernized reincarnation of Google's excellent open-source [JsTemplate project](http://code.google.com/p/google-jstemplate/).
 
-*js-template* has unique features and expressive power not found in other client-side templating frameworks:
+*js-template* has unique features and expressive power not found in other JavaScript templating frameworks:
 
 * Templates stay in HTML where they belong!
 * Templates are themselves valid HTML5. Both pre- and post-processed pages with templates will validate.
@@ -13,12 +13,27 @@ js-template
 * Processed templates are themselves templates and can be efficiently and repeatedly refilled
 * Easy to integrate with other frameworks like Backbone.js
 * Supported in practically all browsers (even back to IE6 & FF3), including mobile browsers
+* Unmatched power weighing in at only ~10.5KB minified and ~3.5KB gzipped
 
-To familiarize yourself with the basic library and its usage, please read the original documentation at http://code.google.com/apis/jstemplate/docs/howto.html. Once you understand the basic concepts, refer to the following changes *js-template*.
+Here is a trivial example of using a template:
 
-Last but not least, most of the credit for the power behind *js-template* goes to Steffen Meschkat and the original committers from Google. My work has been mainly to modernize the core template engine API, integrate it with jQuery, and sprinkle some additional features to make it useful in everyday production work.
+```html
+<p id="myTemplate">Hello, <span data-jst-content="who"></span>!</p>
 
-# How to use *js-template*
+<script>
+$("#myTemplate").refillTemplate({ who: "World" });
+</script>
+```
+which results in:
+```html
+<p id="myTemplate">Hello, <span data-jst-content="who">World</span>!</p>
+```
+
+#### Credit where credit is due
+
+Credit for the power behind *js-template* goes to Steffen Meschkat and the original JsTemplate committers at Google. My work has been mainly to modernize the core template engine API, integrate it with jQuery, fix some bugs, and sprinkle some additional features in to make it useful in everyday production work.
+
+  # Getting started
 
 To use *js-template* in your page, you will need to do five things:
 
@@ -223,7 +238,7 @@ The processing instructions that define the results of template processing are e
 $(<selector for template DOM element(s)>).refillTemplate(data [,parentData]);
 ```
 
-Merges (and re-merges) template data with the selected template DOM node. The template DOM node will not be cloned; this merging occurs in-place. Data can be merged repeatedly and *js-template* will find the differences and modify the DOM tree accordingly. It is preferable to use this technique, including in-place templates, because it allows for fast, real-time updates without cloning or destroying large segments of the DOM.
+Merges (and re-merges) template data with the selected template DOM node. The template DOM node will not be cloned; this merging occurs in-place. Data can be merged repeatedly and *js-template* will efficiently find the differences and modify the DOM tree accordingly. It is preferable to use this technique because it allows for fast, real-time updates without cloning or destroying large segments of the DOM.
 
 * The `data` parameter is a normal JavaScript object whose properties will be used to fill the template with data.
 * The `parentData` parameter is shared data that may be used as a secondary lookup.
@@ -244,7 +259,7 @@ Clones the template, including all its event handlers, and merges the data. The 
 
 This method should be used when the template is stored in a separate DOM node that will be cloned and attached elsewhere in the DOM as needed. In general, it's preferable to use `refillTemplate()` when possible because it allows data to be merged repeatedly to the same DOM elements.
 
-#### Handling `id`s
+#### Handling of `id` attributes
 
 When cloning a template element, `fillTemplate()` removes any `id` attributes in the cloned template so that it can then be attached to the DOM without causing `id` conflicts (in HTML, only one element can have a unique `id` value within the DOM). See the documentation on the `data-jst-id` and `data-jst-idexpr` attributes for more information on providing a cloned template with an `id` attribute.
 
@@ -270,7 +285,7 @@ $(document).ready(function() {
     console.log("Clicked element: ",this);
   });
 
-// The new template will have the click event handler
+// The new template will have the onclick event handler defined above
 $("#template1")
   .fillTemplate()
   .appendTo("#container");
@@ -295,7 +310,7 @@ Loading the page results in this DOM structure:
   <a id="template1" href="javascript:void(0);">Click me!</a>
 </div>
 ```
-and each of the child `a`s of `#container` will have the same `onclick` event that was bound to `#template1`, which when fired, will log the element that was clicked (available via `this` in the event handler) to the console.
+and each of the child `a` elements in `#container` will have the same `onclick` event that was bound to `#template1`, which when fired, will log the element that was clicked (available via `this` in the event handler) to the console.
 
 
 ### templateCallback()
@@ -355,14 +370,13 @@ So if you have the template:
 
 ```html
 <div id="witha">
-  <div id="Hey" 
-       data-jst-content="this.parentNode.id + this.id + dataProperty + $this.dataProperty + declaredVar"
+  <div id="Hey" data-jst-content="this.parentNode.id + this.id + dataProperty + $this.dataProperty + declaredVar"
   ></div>
 </div> 
 ```
 and you process it with the statements
 
-```JavaScript
+```javascript
 var mydata = {dataProperty: "Nonny"};
 var context = {declaredVar, "Ho"};
 $("#witha").refillTemplate(mydata,context);
@@ -388,15 +402,11 @@ This attribute is evaluated as a JavaScript expression in the current processing
 ```
 when processed with the JavaScript statements:
 
-```JavaScript
+```javascript
 var data = "Joe User";
 $("#template").refillTemplate(data);
 ```
-will display
-
-`Welcome Joe User`
-
-in the browser. Note the use of `$this` here: the `refillTemplate()` function is passed the string "Joe User", and so this is the object to which `$this` refers.
+will display "Welcome Joe User" in the browser. Note the use of `$this` here: the `refillTemplate()` function is passed the string "Joe User", and so this is the object to which `$this` refers.
 
 When the template processor executes a `data-jst-content` instruction, a new text node object is created with the string value of the result as its `nodeValue`, and this new text node becomes the only child of the current node. This implementation ensures that no markup in the result is evaluated.
 
@@ -414,7 +424,7 @@ When a template node with a `data-jst-select` attribute is processed, the value 
 
 For example, imagine that you have the following data object:
 
-```JavaScript
+```javascript
 var data = { 
   username:"Jane User", 
   addresses: [{
@@ -525,47 +535,76 @@ If an element with the given ID exists in the document, it is cloned and the clo
 
 The `data-jst-include` attribute allows for recursion, because a template can be included into itself. This feature can be handy when you want to display hierarchically structured data. If you have a hierarchically structured table of contents, for example, recursive `data-jst-include` statements allow you represent the arbitrarily complex hierarchy with a simple template:
 
-```JavaScript
+```javascript
 // Hierarchical data:
 var data = {
-  title: "JsTemplate",
-  items: [ {
-    title: "Using JsTemplate",
-    items: [ { 
-      title: "The *js-template* Module"
-    }, { 
-      title: "JavaScript Data"
-    }, { 
-      title: "Template HTML"
-    }, { 
-      title: "Processing Templates with JavaScript Statements"
-    } ]
-  }, {
-    title: "Template Processing Instructions",
-    items: [ { 
-      title: "Processing Environment" 
-    }, { 
-      title: "Instruction Attributes", 
-      items: [ {
+  title: "js-template",
+  items: [{
+    title: "How to use js-template",
+    items: [{ 
+      title: "Include jQuery in your page"
+    },
+    { 
+      title: "Include js-template in your page"
+    },
+    { 
+      title: "Define your data in JavaScript"
+    },
+    { 
+      title: "Define your templates in HTML"
+    },
+    { 
+      title: "Process the templates"
+    }]
+  },
+  {
+    title: "Reference",
+    items: [{ 
+      title: "Template processing environment" 
+    },
+    { 
+      title: "Template attributes", 
+      items: [{
         title: "data-jst-content"
-      }, {
+      },
+      {
+        title: "data-jst-overwrite"
+      },
+      {
         title: "data-jst-select"
-      }, {
+      },
+      {
         title: "data-jst-if"
-      }, {
+      },
+      {
+        title: "data-jst-show"
+      },
+      {
+        title: "data-jst-hide"
+      },
+      {
         title: "data-jst-include"
-      }, {
+      },
+      {
         title: "data-jst-values"
-      }, {
+      },
+      {
         title: "data-jst-skip"
-      }, {
+      },
+      {
         title: "data-jst-eval"
-      } ]
-    } ]
-  } ]
+      },
+      {
+        title: "data-jst-id"
+      },
+      {
+        title: "data-jst-idexpr"
+      }]
+    }]
+  }]
 };
 ```
-```JavaScript
+```javascript
 <div id="template">
   <span data-jst-content="title">Outline heading</span>
   <ul data-jst-if="items.length">
@@ -579,10 +618,9 @@ var data = {
 
 The recursion in this example terminates because eventually it reaches data objects that have no "items" property. When the `data-jst-select` asks for "items" on one of these leaves, it evaluates to null and no further processing will be performed on that node. Note also that when the node with a `data-jst-include` attribute is replaced with the included node in this example, the replacement node will not have a `data-jst-include` attribute.
 
-How to Use *js-template* described the use of the `filTemplate()` function to process a copy of a template rather than the original template. Templates with recursive `data-jst-include`s must be cloned in this way before processing. Because of the internal details of template processing, a template that contains a recursive reference to itself may be processed incorrectly if the original template is processed directly. The following JavaScript code will perform the required duplication for the above template:
+The **How to Use js-template** section above described the use of the `fillTemplate()` function to process a copy of a template rather than the original template. Templates with recursive `data-jst-include`s must be cloned in this way before processing. Because of the internal details of template processing, a template that contains a recursive reference to itself may be processed incorrectly if the original template is processed directly. The following JavaScript code will perform the required duplication for the above template:
 
-```JavaScript
-
+```javascript
 function displayData(data) {
   // Fill the template
   var template = $("template").fillTemplate(data);
@@ -617,7 +655,7 @@ Every name represents a target for assignment. Every value will be evaluated as 
 
 The `data-jst-values` instruction makes a handy bridge between the DOM and template data. If you want a built-in event handler attribute like `onclick` to be able to access the currently selected portion of the context data, for example, you can use `data-jst-values` to copy a reference to the data into an attribute of the current element, where it will be accessible in the `onclick` attribute via `this`. The following example uses this approach to turn our outline into a collapsible outline:
 
-```JavaScript
+```javascript
 // Function called by onclick to record state of closedness and
 // refresh the outline display
 function setClosed(data, value) {
