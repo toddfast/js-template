@@ -4,7 +4,7 @@
  * @version 1.0
  * @website: https://github.com/toddfast/js-template
  * @license: Apache
-*/
+ */
 
 // Copyright 2006 Google Inc.
 //
@@ -50,9 +50,9 @@ GOOGLE.templates=(function(jQuery) {
 	var JST_ATTRIBUTE_NAMESPACE="data-jst-";
 	var JSTFN_DATA=JST_ATTRIBUTE_NAMESPACE+"fn";
 
-////////////////////////////////////////////////////////////////////////////////
-// utils.js
-////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	// utils.js
+	////////////////////////////////////////////////////////////////////////////
 
 
 	var MAPS_DEBUG = false;
@@ -84,25 +84,25 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Object|null}
 	 */
 	var jsEval = function(expr) {
-	  try {
-	    // NOTE(mesch): An alternative idiom would be:
-	    //
-	    //   eval('(' + expr + ')');
-	    //
-	    // Note that using the square brackets as below, "" evals to undefined.
-	    // The alternative of using parentheses does not work when evaluating
-	    // function literals in IE.
-	    // e.g. eval("(function() {})") returns undefined, and not a function
-	    // object, in IE.
-	    return eval('[' + expr + '][0]');
-	  } catch (e) {
-	    log('EVAL FAILED ' + expr + ': ' + e);
-	    return null;
-	  }
+		try {
+			// NOTE(mesch): An alternative idiom would be:
+			//
+			//   eval('(' + expr + ')');
+			//
+			// Note that using the square brackets as below, "" evals to undefined.
+			// The alternative of using parentheses does not work when evaluating
+			// function literals in IE.
+			// e.g. eval("(function() {})") returns undefined, and not a function
+			// object, in IE.
+			return eval('[' + expr + '][0]');
+		} catch (e) {
+			log('EVAL FAILED ' + expr + ': ' + e);
+			return null;
+		}
 	}
 
 	var jsLength = function(obj) {
-	  return obj.length;
+		return obj.length;
 	}
 
 	var assert = function(obj) {}
@@ -114,9 +114,9 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {Object} from  The source object.
 	 */
 	var copyProperties = function(to, from) {
-	  for (var p in from) {
-	    to[p] = from[p];
-	  }
+		for (var p in from) {
+			to[p] = from[p];
+		}
 	}
 
 
@@ -127,11 +127,11 @@ GOOGLE.templates=(function(jQuery) {
 	 * defined and not null; otherwise the default
 	 */
 	var getDefaultObject = function(value, defaultValue) {
-	  if (typeof value != TYPE_undefined && value != null) {
-	    return /** @type Object */(value);
-	  } else {
-	    return defaultValue;
-	  }
+		if (typeof value != TYPE_undefined && value != null) {
+			return /** @type Object */(value);
+		} else {
+			return defaultValue;
+		}
 	}
 
 	/**
@@ -142,10 +142,10 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {boolean} Is the object an array?
 	 */
 	var isArray = function(value) {
-	  // TAF: Added undefined check
-	  return value && value != null &&
-	      typeof value == TYPE_object &&
-	      typeof value.length == TYPE_number;
+		// TAF: Added undefined check
+		return value && value != null &&
+			typeof value == TYPE_object &&
+			typeof value.length == TYPE_number;
 	}
 
 
@@ -158,14 +158,14 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Array} array  The slice of the array from start to end.
 	 */
 	var arraySlice = function(array, start, opt_end) {
-	  // Use
-	  //   return Function.prototype.call.apply(Array.prototype.slice, arguments);
-	  // instead of the simpler
-	  //   return Array.prototype.slice.call(array, start, opt_end);
-	  // here because of a bug in the FF and IE implementations of
-	  // Array.prototype.slice which causes this function to return an empty list
-	  // if opt_end is not provided.
-	  return Function.prototype.call.apply(Array.prototype.slice, arguments);
+		// Use
+		//   return Function.prototype.call.apply(Array.prototype.slice, arguments);
+		// instead of the simpler
+		//   return Array.prototype.slice.call(array, start, opt_end);
+		// here because of a bug in the FF and IE implementations of
+		// Array.prototype.slice which causes this function to return an empty list
+		// if opt_end is not provided.
+		return Function.prototype.call.apply(Array.prototype.slice, arguments);
 	}
 
 
@@ -177,7 +177,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {number} The integer contained in s, converted on base 10.
 	 */
 	var parseInt10 = function(s) {
-	  return parseInt(s, 10);
+		return parseInt(s, 10);
 	}
 
 
@@ -189,7 +189,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {Array} array  Array to be cleared.
 	 */
 	var arrayClear = function(array) {
-	  array.length = 0;
+		array.length = 0;
 	}
 
 
@@ -201,14 +201,14 @@ GOOGLE.templates=(function(jQuery) {
 	 *
 	 * @param {Object|null} object  The object that the method call targets.
 	 * @param {Function} method  The target method.
-	 * @return {Function}  Method with the target object bound to it and curried by
-	 *                     the provided arguments.
+	 * @return {Function}  Method with the target object bound to it and
+	 *					   curried by the provided arguments.
 	 */
 	function bindFully(object, method, var_args) {
-	  var args = arraySlice(arguments, 2);
-	  return function() {
-	    return method.apply(object, args);
-	  }
+		var args = arraySlice(arguments, 2);
+		return function() {
+			return method.apply(object, args);
+		}
 	}
 
 	// Based on <http://www.w3.org/TR/2000/ REC-DOM-Level-2-Core-20001113/
@@ -229,7 +229,7 @@ GOOGLE.templates=(function(jQuery) {
 
 
 	function domGetElementById(document, id) {
-	  return document.getElementById(id);
+		return document.getElementById(id);
 	}
 
 	/**
@@ -240,7 +240,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Element}  Newly constructed element.
 	 */
 	function domCreateElement(doc, name) {
-	  return doc.createElement(name);
+		return doc.createElement(name);
 	}
 
 	/**
@@ -252,8 +252,8 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {Function} callback  Called on each node in the traversal.
 	 */
 	function domTraverseElements(node, callback) {
-	  var traverser = new DomTraverser(callback);
-	  traverser.run(node);
+		var traverser = new DomTraverser(callback);
+		traverser.run(node);
 	}
 
 	/**
@@ -263,7 +263,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @class
 	 */
 	function DomTraverser(callback) {
-	  this.callback_ = callback;
+		this.callback_ = callback;
 	}
 
 	/**
@@ -271,11 +271,11 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {Element} root  The root node of the traversal.
 	 */
 	DomTraverser.prototype.run = function(root) {
-	  var me = this;
-	  me.queue_ = [ root ];
-	  while (jsLength(me.queue_)) {
-	    me.process_(me.queue_.shift());
-	  }
+		var me = this;
+		me.queue_ = [ root ];
+		while (jsLength(me.queue_)) {
+			me.process_(me.queue_.shift());
+		}
 	}
 
 	/**
@@ -283,15 +283,15 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {Element} node  The current node of the traversal.
 	 */
 	DomTraverser.prototype.process_ = function(node) {
-	  var me = this;
+		var me = this;
 
-	  me.callback_(node);
+		me.callback_(node);
 
-	  for (var c = node.firstChild; c; c = c.nextSibling) {
-	    if (c.nodeType == DOM_ELEMENT_NODE) {
-	      me.queue_.push(c);
-	    }
-	  }
+		for (var c = node.firstChild; c; c = c.nextSibling) {
+			if (c.nodeType == DOM_ELEMENT_NODE) {
+				me.queue_.push(c);
+			}
+		}
 	}
 
 	/**
@@ -305,7 +305,7 @@ GOOGLE.templates=(function(jQuery) {
 		// TAF: IE7 has a bizarre problem getting custom attributes from
 		// <table> elements...
 		try {
-			  return node.getAttribute(name);
+			return node.getAttribute(name);
 		}
 		catch (e) {
 			if (node.nodeName==="TABLE") {
@@ -318,11 +318,11 @@ GOOGLE.templates=(function(jQuery) {
 			}
 		}
 
-	  // NOTE(mesch): Neither in IE nor in Firefox, HTML DOM attributes
-	  // implement namespaces. All items in the attribute collection have
-	  // null localName and namespaceURI attribute values. In IE, we even
-	  // encounter DIV elements that don't implement the method
-	  // getAttributeNS().
+		// NOTE(mesch): Neither in IE nor in Firefox, HTML DOM attributes
+		// implement namespaces. All items in the attribute collection have
+		// null localName and namespaceURI attribute values. In IE, we even
+		// encounter DIV elements that don't implement the method
+		// getAttributeNS().
 	}
 
 
@@ -334,7 +334,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {string|number} value  Set attribute to this value.
 	 */
 	function domSetAttribute(node, name, value) {
-	  node.setAttribute(name, value);
+		node.setAttribute(name, value);
 	}
 
 	/**
@@ -344,7 +344,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {string} name  Name of parameter to remove.
 	 */
 	function domRemoveAttribute(node, name) {
-	  node.removeAttribute(name);
+		node.removeAttribute(name);
 	}
 
 	/**
@@ -354,13 +354,13 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Node}  Cloned node.
 	 */
 	function domCloneNode(node) {
-	  // TAF: We need to copy event handlers as well. Dunno why this doesn't
-	  // work though; instead, always have to use jQuery.live()
-//	  return node.cloneNode(true);
-	  return jQuery(node).clone(true)[0];
+		// TAF: We need to copy event handlers as well. Dunno why this doesn't
+		// work though; instead, always have to use jQuery.live()
+		//	  return node.cloneNode(true);
+		return jQuery(node).clone(true)[0];
 
-	  // NOTE(mesch): we never so far wanted to use cloneNode(false),
-	  // hence the default.
+		// NOTE(mesch): we never so far wanted to use cloneNode(false),
+		// hence the default.
 	}
 
 	/**
@@ -370,7 +370,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Element}  Cloned element.
 	 */
 	function domCloneElement(element) {
-	  return /** @type {Element} */(domCloneNode(element));
+		return /** @type {Element} */(domCloneNode(element));
 	}
 
 	/**
@@ -383,13 +383,13 @@ GOOGLE.templates=(function(jQuery) {
 	 * @returns {Document}  The owner document or window.document if unsupported.
 	 */
 	function ownerDocument(node) {
-	  if (!node) {
-	    return document;
-	  } else if (node.nodeType == DOM_DOCUMENT_NODE) {
-	    return /** @type Document */(node);
-	  } else {
-	    return node.ownerDocument || document;
-	  }
+		if (!node) {
+			return document;
+		} else if (node.nodeType == DOM_DOCUMENT_NODE) {
+			return /** @type Document */(node);
+		} else {
+			return node.ownerDocument || document;
+		}
 	}
 
 	/**
@@ -400,7 +400,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Text}  Newly constructed text node.
 	 */
 	function domCreateTextNode(doc, text) {
-	  return doc.createTextNode(text);
+		return doc.createTextNode(text);
 	}
 
 	/**
@@ -411,7 +411,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Node}  Newly appended node.
 	 */
 	function domAppendChild(node, child) {
-	  return node.appendChild(child);
+		return node.appendChild(child);
 	}
 
 	/**
@@ -420,8 +420,8 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {Element} node  The dom element to manipulate.
 	 */
 	function displayDefault(node) {
-//	  node.style[CSS_display] = '';
-	  jQuery(node).show();
+		//	  node.style[CSS_display] = '';
+		jQuery(node).show();
 	}
 
 	/**
@@ -431,8 +431,8 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {Element} node  The dom element to manipulate.
 	 */
 	function displayNone(node) {
-//	  node.style[CSS_display] = 'none';
-	  jQuery(node).hide();
+		//	  node.style[CSS_display] = 'none';
+		jQuery(node).hide();
 	}
 
 
@@ -442,7 +442,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {Element} node  The dom element to manipulate.
 	 */
 	function positionAbsolute(node) {
-	  node.style[CSS_position] = 'absolute';
+		node.style[CSS_position] = 'absolute';
 	}
 
 
@@ -454,7 +454,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Node}  Reference to new child.
 	 */
 	function domInsertBefore(newChild, oldChild) {
-	  return oldChild.parentNode.insertBefore(newChild, oldChild);
+		return oldChild.parentNode.insertBefore(newChild, oldChild);
 	}
 
 	/**
@@ -465,7 +465,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Node}  Replaced node.
 	 */
 	function domReplaceChild(newChild, oldChild) {
-	  return oldChild.parentNode.replaceChild(newChild, oldChild);
+		return oldChild.parentNode.replaceChild(newChild, oldChild);
 	}
 
 	/**
@@ -475,7 +475,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Node}  The removed node.
 	 */
 	function domRemoveNode(node) {
-	  return domRemoveChild(node.parentNode, node);
+		return domRemoveChild(node.parentNode, node);
 	}
 
 	/**
@@ -486,7 +486,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Node}  Removed node.
 	 */
 	function domRemoveChild(node, child) {
-	  return node.removeChild(child);
+		return node.removeChild(child);
 	}
 
 
@@ -499,7 +499,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {string}  Trimmed string.
 	 */
 	function stringTrim(str) {
-	  return stringTrimRight(stringTrimLeft(str));
+		return stringTrimRight(stringTrimLeft(str));
 	}
 
 	/**
@@ -511,7 +511,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {string}  Trimmed string.
 	 */
 	function stringTrimLeft(str) {
-	  return str.replace(/^\s+/, "");
+		return str.replace(/^\s+/, "");
 	}
 
 	/**
@@ -521,15 +521,15 @@ GOOGLE.templates=(function(jQuery) {
 	 *
 	 * @param {string} str  Input string.
 	 * @return {string}  Trimmed string.
-	  */
+	 */
 	function stringTrimRight(str) {
-	  return str.replace(/\s+$/, "");
+		return str.replace(/\s+$/, "");
 	}
 
 
-////////////////////////////////////////////////////////////////////////////////
-// jsevalcontext.js
-////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	// jsevalcontext.js
+	////////////////////////////////////////////////////////////////////////////
 
 
 	/**
@@ -572,7 +572,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @constructor
 	 */
 	function JsEvalContext(opt_data, opt_parent) {
-	  this.constructor_.apply(this, arguments);
+		this.constructor_.apply(this, arguments);
 	}
 
 	/**
@@ -588,68 +588,68 @@ GOOGLE.templates=(function(jQuery) {
 	 * context of the root object.
 	 */
 	JsEvalContext.prototype.constructor_ = function(opt_data, opt_parent) {
-	  var me = this;
+		var me = this;
 
-	  /**
-	   * The context for variable definitions in which the jstemplate
-	   * expressions are evaluated. Other than for the local context,
-	   * which replaces the parent context, variable definitions of the
-	   * parent are inherited. The special variable $this points to data_.
-	   *
-	   * If this instance is recycled from the cache, then the property is
-	   * already initialized.
-	   *
-	   * @type {Object}
-	   */
-	  if (!me.vars_) {
-	    me.vars_ = {};
-	  }
-	  if (opt_parent) {
-	    // If there is a parent node, inherit local variables from the
-	    // parent.
-	    copyProperties(me.vars_, opt_parent.vars_);
-	  } else {
-	    // If a root node, inherit global symbols. Since every parent
-	    // chain has a root with no parent, global variables will be
-	    // present in the case above too. This means that globals can be
-	    // overridden by locals, as it should be.
-	    copyProperties(me.vars_, JsEvalContext.globals_);
-	  }
+		/**
+		 * The context for variable definitions in which the jstemplate
+		 * expressions are evaluated. Other than for the local context,
+		 * which replaces the parent context, variable definitions of the
+		 * parent are inherited. The special variable $this points to data_.
+		 *
+		 * If this instance is recycled from the cache, then the property is
+		 * already initialized.
+		 *
+		 * @type {Object}
+		 */
+		if (!me.vars_) {
+			me.vars_ = {};
+		}
+		if (opt_parent) {
+			// If there is a parent node, inherit local variables from the
+			// parent.
+			copyProperties(me.vars_, opt_parent.vars_);
+		} else {
+			// If a root node, inherit global symbols. Since every parent
+			// chain has a root with no parent, global variables will be
+			// present in the case above too. This means that globals can be
+			// overridden by locals, as it should be.
+			copyProperties(me.vars_, JsEvalContext.globals_);
+		}
 
-	  /**
-	   * The current context object is assigned to the special variable
-	   * $this so it is possible to use it in expressions.
-	   * @type Object
-	   */
-	  me.vars_[VAR_this] = opt_data;
+		/**
+		 * The current context object is assigned to the special variable
+		 * $this so it is possible to use it in expressions.
+		 * @type Object
+		 */
+		me.vars_[VAR_this] = opt_data;
 
-	  /**
-	   * The entire context structure is exposed as a variable so it can be
-	   * passed to javascript invocations through jseval.
-	   */
-	  me.vars_[VAR_context] = me;
+		/**
+		 * The entire context structure is exposed as a variable so it can be
+		 * passed to javascript invocations through jseval.
+		 */
+		me.vars_[VAR_context] = me;
 
-	  /**
-	   * The local context of the input data in which the jstemplate
-	   * expressions are evaluated. Notice that this is usually an Object,
-	   * but it can also be a scalar value (and then still the expression
-	   * $this can be used to refer to it). Notice this can even be value,
-	   * undefined or null. Hence, we have to protect jsexec() from using
-	   * undefined or null, yet we want $this to reflect the true value of
-	   * the current context. Thus we assign the original value to $this,
-	   * above, but for the expression context we replace null and
-	   * undefined by the empty string.
-	   *
-	   * @type {Object|null}
-	   */
-	  me.data_ = getDefaultObject(opt_data, STRING_empty);
+		/**
+		 * The local context of the input data in which the jstemplate
+		 * expressions are evaluated. Notice that this is usually an Object,
+		 * but it can also be a scalar value (and then still the expression
+		 * $this can be used to refer to it). Notice this can even be value,
+		 * undefined or null. Hence, we have to protect jsexec() from using
+		 * undefined or null, yet we want $this to reflect the true value of
+		 * the current context. Thus we assign the original value to $this,
+		 * above, but for the expression context we replace null and
+		 * undefined by the empty string.
+		 *
+		 * @type {Object|null}
+		 */
+		me.data_ = getDefaultObject(opt_data, STRING_empty);
 
-	  if (!opt_parent) {
-	    // If this is a top-level context, create a variable reference to the data
-	    // to allow for  accessing top-level properties of the original context
-	    // data from child contexts.
-	    me.vars_[VAR_top] = me.data_;
-	  }
+		if (!opt_parent) {
+			// If this is a top-level context, create a variable reference to the data
+			// to allow for  accessing top-level properties of the original context
+			// data from child contexts.
+			me.vars_[VAR_top] = me.data_;
+		}
 	};
 
 
@@ -672,7 +672,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {Object|null} value
 	 */
 	JsEvalContext.setGlobal = function(name, value) {
-	  JsEvalContext.globals_[name] = value;
+		JsEvalContext.globals_[name] = value;
 	};
 
 
@@ -700,13 +700,13 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {JsEvalContext}
 	 */
 	JsEvalContext.create = function(opt_data, opt_parent) {
-	  if (jsLength(JsEvalContext.recycledInstances_) > 0) {
-	    var instance = JsEvalContext.recycledInstances_.pop();
-	    JsEvalContext.call(instance, opt_data, opt_parent);
-	    return instance;
-	  } else {
-	    return new JsEvalContext(opt_data, opt_parent);
-	  }
+		if (jsLength(JsEvalContext.recycledInstances_) > 0) {
+			var instance = JsEvalContext.recycledInstances_.pop();
+			JsEvalContext.call(instance, opt_data, opt_parent);
+			return instance;
+		} else {
+			return new JsEvalContext(opt_data, opt_parent);
+		}
 	};
 
 
@@ -717,12 +717,12 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {JsEvalContext} instance
 	 */
 	JsEvalContext.recycle = function(instance) {
-	  for (var i in instance.vars_) {
-	    // NOTE(mesch): We avoid object creation here. (IE6 perf)
-	    delete instance.vars_[i];
-	  }
-	  instance.data_ = null;
-	  JsEvalContext.recycledInstances_.push(instance);
+		for (var i in instance.vars_) {
+			// NOTE(mesch): We avoid object creation here. (IE6 perf)
+			delete instance.vars_[i];
+		}
+		instance.data_ = null;
+		JsEvalContext.recycledInstances_.push(instance);
 	};
 
 
@@ -740,15 +740,15 @@ GOOGLE.templates=(function(jQuery) {
 	 * the context of template.
 	 */
 	JsEvalContext.prototype.jsexec = function(exprFunction, template) {
-	  try {
-	    return exprFunction.call(template, this.vars_, this.data_);
-	  } catch (e) {
-		  if (!(e instanceof ReferenceError)) { // TAF: quiet for missing props
-			log('jsexec EXCEPTION: ' + e + ' at ' + template +
-				' with ' + exprFunction);
+		try {
+			return exprFunction.call(template, this.vars_, this.data_);
+		} catch (e) {
+			if (!(e instanceof ReferenceError)) { // TAF: quiet for missing props
+				log('jsexec EXCEPTION: ' + e + ' at ' + template +
+					' with ' + exprFunction);
 			}
-	    return JsEvalContext.globals_[GLOB_default];
-	  }
+			return JsEvalContext.globals_[GLOB_default];
+		}
 	};
 
 
@@ -770,10 +770,10 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {JsEvalContext}
 	 */
 	JsEvalContext.prototype.clone = function(data, index, count) {
-	  var ret = JsEvalContext.create(data, this);
-	  ret.setVariable(VAR_index, index);
-	  ret.setVariable(VAR_count, count);
-	  return ret;
+		var ret = JsEvalContext.create(data, this);
+		ret.setVariable(VAR_index, index);
+		ret.setVariable(VAR_count, count);
+		return ret;
 	};
 
 
@@ -787,7 +787,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {Object?} value
 	 */
 	JsEvalContext.prototype.setVariable = function(name, value) {
-	  this.vars_[name] = value;
+		this.vars_[name] = value;
 	};
 
 
@@ -802,7 +802,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Object?} value
 	 */
 	JsEvalContext.prototype.getVariable = function(name) {
-	  return this.vars_[name];
+		return this.vars_[name];
 	};
 
 
@@ -816,8 +816,8 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Object?} value
 	 */
 	JsEvalContext.prototype.evalExpression = function(expr, opt_template) {
-	  var exprFunction = jsEvalToFunction(expr);
-	  return this.jsexec(exprFunction, opt_template);
+		var exprFunction = jsEvalToFunction(expr);
+		return this.jsexec(exprFunction, opt_template);
 	};
 
 
@@ -848,16 +848,16 @@ GOOGLE.templates=(function(jQuery) {
 	 * context of vars and data.
 	 */
 	var jsEvalToFunction = function(expr) {
-	  if (!JsEvalContext.evalToFunctionCache_[expr]) {
-	    try {
-	      // NOTE(mesch): The Function constructor is faster than eval().
-	      JsEvalContext.evalToFunctionCache_[expr] =
-	        new Function(STRING_a, STRING_b, STRING_with + expr);
-	    } catch (e) {
-	      log('jsEvalToFunction (' + expr + ') EXCEPTION ' + e);
-	    }
-	  }
-	  return JsEvalContext.evalToFunctionCache_[expr];
+		if (!JsEvalContext.evalToFunctionCache_[expr]) {
+			try {
+				// NOTE(mesch): The Function constructor is faster than eval().
+				JsEvalContext.evalToFunctionCache_[expr] =
+					new Function(STRING_a, STRING_b, STRING_with + expr);
+			} catch (e) {
+				log('jsEvalToFunction (' + expr + ') EXCEPTION ' + e);
+			}
+		}
+		return JsEvalContext.evalToFunctionCache_[expr];
 	}
 
 
@@ -870,7 +870,7 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {string}
 	 */
 	function jsEvalToSelf(expr) {
-	  return expr;
+		return expr;
 	}
 
 
@@ -886,38 +886,38 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Array}
 	 */
 	function jsEvalToValues(expr) {
-	  // TODO(mesch): It is insufficient to split the values by simply
-	  // finding semi-colons, as the semi-colon may be part of a string
-	  // constant or escaped.
-	  var ret = [];
-	  var values = expr.split(REGEXP_pipe);//REGEXP_semicolon);
+		// TODO(mesch): It is insufficient to split the values by simply
+		// finding semi-colons, as the semi-colon may be part of a string
+		// constant or escaped.
+		var ret = [];
+		var values = expr.split(REGEXP_pipe);//REGEXP_semicolon);
 
-	  var tokens=[];
-	  for (var i = 0, I = jsLength(values); i < I; ++i) {
-		// TAF: If we get an empty string as a token, it will be because we
-		// got an OR ('||') in the input and the regular expression incorrectly
-		// split it. Put the || back.
-		var token;
-		if (values[i]==='') {
-			token=tokens.pop();
-			token=token+" || "+values[++i];
-			tokens.push(token);
+		var tokens=[];
+		for (var i = 0, I = jsLength(values); i < I; ++i) {
+			// TAF: If we get an empty string as a token, it will be because we
+			// got an OR ('||') in the input and the regular expression incorrectly
+			// split it. Put the || back.
+			var token;
+			if (values[i]==='') {
+				token=tokens.pop();
+				token=token+" || "+values[++i];
+				tokens.push(token);
+			}
+			else {
+				tokens.push(values[i]);
+			}
 		}
-		else {
-			tokens.push(values[i]);
-		}
-	  }
 
-	  for (i = 0, I = jsLength(tokens); i < I; ++i) {
-	    var separator = tokens[i].indexOf(CHAR_equals);//CHAR_colon);
-	    if (separator < 0) {
-	      continue;
-	    }
-	    var label = stringTrim(tokens[i].substr(0, separator));
-	    var value = jsEvalToFunction(tokens[i].substr(separator + 1));
-	    ret.push(label, value);
-	  }
-	  return ret;
+		for (i = 0, I = jsLength(tokens); i < I; ++i) {
+			var separator = tokens[i].indexOf(CHAR_equals);//CHAR_colon);
+			if (separator < 0) {
+				continue;
+			}
+			var label = stringTrim(tokens[i].substr(0, separator));
+			var value = jsEvalToFunction(tokens[i].substr(separator + 1));
+			ret.push(label, value);
+		}
+		return ret;
 	}
 
 
@@ -933,21 +933,21 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Array.<Function>}
 	 */
 	function jsEvalToExpressions(expr) {
-	  var ret = [];
-	  var values = expr.split(REGEXP_semicolon);
-	  for (var i = 0, I = jsLength(values); i < I; ++i) {
-	    if (values[i]) {
-	      var value = jsEvalToFunction(values[i]);
-	      ret.push(value);
-	    }
-	  }
-	  return ret;
+		var ret = [];
+		var values = expr.split(REGEXP_semicolon);
+		for (var i = 0, I = jsLength(values); i < I; ++i) {
+			if (values[i]) {
+				var value = jsEvalToFunction(values[i]);
+				ret.push(value);
+			}
+		}
+		return ret;
 	}
 
 
-////////////////////////////////////////////////////////////////////////////////
-// jstemplate.js
-////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	// jstemplate.js
+	////////////////////////////////////////////////////////////////////////////
 
 
 	/**
@@ -955,15 +955,15 @@ GOOGLE.templates=(function(jQuery) {
 	 * normal HTML elements and bind expression context data to the HTML
 	 * fragment that is used as template.
 	 */
-//	var ATT_select = 'jsselect';
-//	var ATT_instance = 'jsinstance';
-//	var ATT_display = 'jsdisplay';
-//	var ATT_values = 'jsvalues';
-//	var ATT_vars = 'jsvars';
-//	var ATT_eval = 'jseval';
-//	var ATT_transclude = 'transclude';
-//	var ATT_content = 'jscontent';
-//	var ATT_skip = 'jsskip';
+	//	var ATT_select = 'jsselect';
+	//	var ATT_instance = 'jsinstance';
+	//	var ATT_display = 'jsdisplay';
+	//	var ATT_values = 'jsvalues';
+	//	var ATT_vars = 'jsvars';
+	//	var ATT_eval = 'jseval';
+	//	var ATT_transclude = 'transclude';
+	//	var ATT_content = 'jscontent';
+	//	var ATT_skip = 'jsskip';
 
 	// TAF
 	var ATT_select = JST_ATTRIBUTE_NAMESPACE+'select';
@@ -1038,28 +1038,28 @@ GOOGLE.templates=(function(jQuery) {
 	 *     in MAPS_DEBUG.
 	 */
 	function jstProcess(context, template, inplace, opt_debugging) {
-	  var processor = new JstProcessor;
-	  if (MAPS_DEBUG && opt_debugging) {
-	    processor.setDebugging(opt_debugging);
-	  }
-	  JstProcessor.prepareTemplate_(template);
+		var processor = new JstProcessor;
+		if (MAPS_DEBUG && opt_debugging) {
+			processor.setDebugging(opt_debugging);
+		}
+		JstProcessor.prepareTemplate_(template);
 
-	  // TAF: Remember whether this was a cloned node or in-place template
-	  // so that we can properly handle id's
-	  processor.inplace=inplace;
+		// TAF: Remember whether this was a cloned node or in-place template
+		// so that we can properly handle id's
+		processor.inplace=inplace;
 
-	  /**
-	   * Caches the document of the template node, so we don't have to
-	   * access it through ownerDocument.
-	   * @type Document
-	   */
-	  processor.document_ = ownerDocument(template);
+		/**
+		 * Caches the document of the template node, so we don't have to
+		 * access it through ownerDocument.
+		 * @type Document
+		 */
+		processor.document_ = ownerDocument(template);
 
-	  processor.run_(bindFully(processor, processor.jstProcessOuter_,
-	                           context, template));
-	  if (MAPS_DEBUG && opt_debugging) {
-	    log('jstProcess:' + '\n' + processor.getLogs().join('\n'));
-	  }
+		processor.run_(bindFully(processor, processor.jstProcessOuter_,
+		context, template));
+		if (MAPS_DEBUG && opt_debugging) {
+			log('jstProcess:' + '\n' + processor.getLogs().join('\n'));
+		}
 	}
 
 
@@ -1071,14 +1071,14 @@ GOOGLE.templates=(function(jQuery) {
 	 * @constructor
 	 */
 	function JstProcessor() {
-	  if (MAPS_DEBUG) {
-	    /**
-	     * An array of logging messages.  These are collected during processing
-	     * and dumped to the console at the end.
-	     * @type Array.<string>
-	     */
-	    this.logs_ = [];
-	  }
+		if (MAPS_DEBUG) {
+			/**
+			 * An array of logging messages.  These are collected during processing
+			 * and dumped to the console at the end.
+			 * @type Array.<string>
+			 */
+			this.logs_ = [];
+		}
 	}
 
 
@@ -1148,11 +1148,11 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {Element} template
 	 */
 	JstProcessor.prepareTemplate_ = function(template) {
-	  if (!template[PROP_jstcache]) {
-	    domTraverseElements(template, function(node) {
-	      JstProcessor.prepareNode_(node);
-	    });
-	  }
+		if (!template[PROP_jstcache]) {
+			domTraverseElements(template, function(node) {
+				JstProcessor.prepareNode_(node);
+			});
+		}
 	};
 
 
@@ -1163,21 +1163,21 @@ GOOGLE.templates=(function(jQuery) {
 	 * @type Array.<Array>
 	 */
 	var JST_ATTRIBUTES = [
-	    [ ATT_select, jsEvalToFunction ],
-	    [ ATT_display, jsEvalToFunction ],
-	    [ ATT_values, jsEvalToValues ],
-	    [ ATT_vars, jsEvalToValues ],
-	    [ ATT_eval, jsEvalToExpressions ],
-	    [ ATT_transclude, jsEvalToSelf ],
-	    [ ATT_content, jsEvalToFunction ],
-	    [ ATT_skip, jsEvalToFunction ],
+		[ ATT_select, jsEvalToFunction ],
+		[ ATT_display, jsEvalToFunction ],
+		[ ATT_values, jsEvalToValues ],
+		[ ATT_vars, jsEvalToValues ],
+		[ ATT_eval, jsEvalToExpressions ],
+		[ ATT_transclude, jsEvalToSelf ],
+		[ ATT_content, jsEvalToFunction ],
+		[ ATT_skip, jsEvalToFunction ],
 		// TAF
-	    [ ATT_hide, jsEvalToFunction ],
-	    [ ATT_show, jsEvalToFunction ],
-	    [ ATT_id, jsEvalToSelf ],
-	    [ ATT_idexpr, jsEvalToFunction ],
-	    [ ATT_overwrite, jsEvalToSelf ],
-	    [ ATT_data, jsEvalToValues ]
+		[ ATT_hide, jsEvalToFunction ],
+		[ ATT_show, jsEvalToFunction ],
+		[ ATT_id, jsEvalToSelf ],
+		[ ATT_idexpr, jsEvalToFunction ],
+		[ ATT_overwrite, jsEvalToSelf ],
+		[ ATT_data, jsEvalToValues ]
 	];
 
 
@@ -1193,75 +1193,76 @@ GOOGLE.templates=(function(jQuery) {
 	 * returns an object with no properties (the jscache_[0] entry).
 	 */
 	JstProcessor.prepareNode_ = function(node) {
-	  // If the node already has a cache property, return it.
-	  if (node[PROP_jstcache]) {
-	    return node[PROP_jstcache];
-	  }
+		// If the node already has a cache property, return it.
+		if (node[PROP_jstcache]) {
+			return node[PROP_jstcache];
+		}
 
-	  // If it is not found, we always set the PROP_jstcache property on the node.
-	  // Accessing the property is faster than executing getAttribute(). If we
-	  // don't find the property on a node that was cloned in jstSelect_(), we
-	  // will fall back to check for the attribute and set the property
-	  // from cache.
+		// If it is not found, we always set the PROP_jstcache property on the node.
+		// Accessing the property is faster than executing getAttribute(). If we
+		// don't find the property on a node that was cloned in jstSelect_(), we
+		// will fall back to check for the attribute and set the property
+		// from cache.
 
-	  // If the node has an attribute indexing a cache object, set it as a property
-	  // and return it.
-	  var jstid = domGetAttribute(node, ATT_jstcache);
-	  if (jstid != null) {
-	    return node[PROP_jstcache] = JstProcessor.jstcache_[jstid];
-	  }
+		// If the node has an attribute indexing a cache object, set it as a property
+		// and return it.
+		var jstid = domGetAttribute(node, ATT_jstcache);
+		if (jstid != null) {
+			return node[PROP_jstcache] = JstProcessor.jstcache_[jstid];
+		}
 
-	  var attributeValues = JstProcessor.attributeValues_;
-	  var attributeList = JstProcessor.attributeList_;
-	  attributeList.length = 0;
+		var attributeValues = JstProcessor.attributeValues_;
+		var attributeList = JstProcessor.attributeList_;
+		attributeList.length = 0;
 
-	  // Look for interesting attributes.
-	  for (var i = 0, I = jsLength(JST_ATTRIBUTES); i < I; ++i) {
-	    var name = JST_ATTRIBUTES[i][0];
-	    var value = domGetAttribute(node, name);
-	    attributeValues[name] = value;
-	    if (value != null) {
-	      attributeList.push(name + "=" + value);
-	    }
-	  }
+		// Look for interesting attributes.
+		for (var i = 0, I = jsLength(JST_ATTRIBUTES); i < I; ++i) {
+			var name = JST_ATTRIBUTES[i][0];
+			var value = domGetAttribute(node, name);
+			attributeValues[name] = value;
+			if (value != null) {
+				attributeList.push(name + "=" + value);
+			}
+		}
 
-	  // If none found, mark this node to prevent further inspection, and return
-	  // an empty cache object.
-	  if (attributeList.length == 0) {
-	    domSetAttribute(node, ATT_jstcache, STRING_zero);
-	    return node[PROP_jstcache] = JstProcessor.jstcache_[0];
-	  }
+		// If none found, mark this node to prevent further inspection, and return
+		// an empty cache object.
+		if (attributeList.length == 0) {
+			domSetAttribute(node, ATT_jstcache, STRING_zero);
+			return node[PROP_jstcache] = JstProcessor.jstcache_[0];
+		}
 
-	  // If we already have a cache object corresponding to these attributes,
-	  // annotate the node with it, and return it.
-	  var attstring = attributeList.join(CHAR_ampersand);
-	  if (jstid = JstProcessor.jstcacheattributes_[attstring]) {
-	    domSetAttribute(node, ATT_jstcache, jstid);
-	    return node[PROP_jstcache] = JstProcessor.jstcache_[jstid];
-	  }
+		// If we already have a cache object corresponding to these attributes,
+		// annotate the node with it, and return it.
+		var attstring = attributeList.join(CHAR_ampersand);
+		if (jstid = JstProcessor.jstcacheattributes_[attstring]) {
+			domSetAttribute(node, ATT_jstcache, jstid);
+			return node[PROP_jstcache] = JstProcessor.jstcache_[jstid];
+		}
 
-	  // Otherwise, build a new cache object.
-	  var jstcache = {};
-	  for (var i = 0, I = jsLength(JST_ATTRIBUTES); i < I; ++i) {
-	    var att = JST_ATTRIBUTES[i];
-	    var name = att[0];
-	    var parse = att[1];
-	    var value = attributeValues[name];
-	    if (value != null) {
-	      jstcache[name] = parse(value);
-	      if (MAPS_DEBUG) {
-	        jstcache.jstAttributeValues = jstcache.jstAttributeValues || {};
-	        jstcache.jstAttributeValues[name] = value;
-	      }
-	    }
-	  }
+		// Otherwise, build a new cache object.
+		var jstcache = {};
+		for (var i = 0, I = jsLength(JST_ATTRIBUTES); i < I; ++i) {
+			var att = JST_ATTRIBUTES[i];
+			var name = att[0];
+			var parse = att[1];
+			var value = attributeValues[name];
+			if (value != null) {
+				jstcache[name] = parse(value);
+				if (MAPS_DEBUG) {
+					jstcache.jstAttributeValues =
+						jstcache.jstAttributeValues || {};
+					jstcache.jstAttributeValues[name] = value;
+				}
+			}
+		}
 
-	  jstid = STRING_empty + ++JstProcessor.jstid_;
-	  domSetAttribute(node, ATT_jstcache, jstid);
-	  JstProcessor.jstcache_[jstid] = jstcache;
-	  JstProcessor.jstcacheattributes_[attstring] = jstid;
+		jstid = STRING_empty + ++JstProcessor.jstid_;
+		domSetAttribute(node, ATT_jstcache, jstid);
+		JstProcessor.jstcache_[jstid] = jstcache;
+		JstProcessor.jstcacheattributes_[attstring] = jstid;
 
-	  return node[PROP_jstcache] = jstcache;
+		return node[PROP_jstcache] = jstcache;
 	};
 
 
@@ -1284,56 +1285,56 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {Function} f The first function to run.
 	 */
 	JstProcessor.prototype.run_ = function(f) {
-	  var me = this;
+		var me = this;
 
-	  /**
-	   * A stack of queues of pre-order calls.
-	   * The inner arrays (constituent queues) are structured as
-	   * [ arg2, arg1, method, arg2, arg1, method, ...]
-	   * ie. a flattened array of methods with 2 arguments, in reverse order
-	   * for efficient push/pop.
-	   *
-	   * The outer array is a stack of such queues.
-	   *
-	   * @type Array.<Array>
-	   */
-	  var calls = me.calls_ = [];
+		/**
+		 * A stack of queues of pre-order calls.
+		 * The inner arrays (constituent queues) are structured as
+		 * [ arg2, arg1, method, arg2, arg1, method, ...]
+		 * ie. a flattened array of methods with 2 arguments, in reverse order
+		 * for efficient push/pop.
+		 *
+		 * The outer array is a stack of such queues.
+		 *
+		 * @type Array.<Array>
+		 */
+		var calls = me.calls_ = [];
 
-	  /**
-	   * The index into the queue for each depth. NOTE: Alternative would
-	   * be to maintain the queues in reverse order (popping off of the
-	   * end) but the repeated calls to .pop() consumed 90% of this
-	   * function's execution time.
-	   * @type Array.<number>
-	   */
-	  var queueIndices = me.queueIndices_ = [];
+		/**
+		 * The index into the queue for each depth. NOTE: Alternative would
+		 * be to maintain the queues in reverse order (popping off of the
+		 * end) but the repeated calls to .pop() consumed 90% of this
+		 * function's execution time.
+		 * @type Array.<number>
+		 */
+		var queueIndices = me.queueIndices_ = [];
 
-	  /**
-	   * A pool of empty arrays.  Minimizes object allocation for IE6's benefit.
-	   * @type Array.<Array>
-	   */
-	  var arrayPool = me.arrayPool_ = [];
+		/**
+		 * A pool of empty arrays.  Minimizes object allocation for IE6's benefit.
+		 * @type Array.<Array>
+		 */
+		var arrayPool = me.arrayPool_ = [];
 
-	  f();
-	  var queue, queueIndex;
-	  var method, arg1, arg2;
-	  var temp;
-	  while (calls.length) {
-	    queue = calls[calls.length - 1];
-	    queueIndex = queueIndices[queueIndices.length - 1];
-	    if (queueIndex >= queue.length) {
-	      me.recycleArray_(calls.pop());
-	      queueIndices.pop();
-	      continue;
-	    }
+		f();
+		var queue, queueIndex;
+		var method, arg1, arg2;
+		var temp;
+		while (calls.length) {
+			queue = calls[calls.length - 1];
+			queueIndex = queueIndices[queueIndices.length - 1];
+			if (queueIndex >= queue.length) {
+				me.recycleArray_(calls.pop());
+				queueIndices.pop();
+				continue;
+			}
 
-	    // Run the first function in the queue.
-	    method = queue[queueIndex++];
-	    arg1 = queue[queueIndex++];
-	    arg2 = queue[queueIndex++];
-	    queueIndices[queueIndices.length - 1] = queueIndex;
-	    method.call(me, arg1, arg2);
-	  }
+			// Run the first function in the queue.
+			method = queue[queueIndex++];
+			arg1 = queue[queueIndex++];
+			arg2 = queue[queueIndex++];
+			queueIndices[queueIndices.length - 1] = queueIndex;
+			method.call(me, arg1, arg2);
+		}
 	};
 
 
@@ -1347,8 +1348,8 @@ GOOGLE.templates=(function(jQuery) {
 	 *     [ method, arg1, arg2, method, arg1, arg2, ... ]
 	 */
 	JstProcessor.prototype.push_ = function(args) {
-	  this.calls_.push(args);
-	  this.queueIndices_.push(0);
+		this.calls_.push(args);
+		this.queueIndices_.push(0);
 	};
 
 
@@ -1357,24 +1358,24 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {boolean} debugging New state
 	 */
 	JstProcessor.prototype.setDebugging = function(debugging) {
-	  if (MAPS_DEBUG) {
-	    this.debugging_ = debugging;
-	  }
+		if (MAPS_DEBUG) {
+			this.debugging_ = debugging;
+		}
 	};
 
 
 	JstProcessor.prototype.createArray_ = function() {
-	  if (this.arrayPool_.length) {
-	    return this.arrayPool_.pop();
-	  } else {
-	    return [];
-	  }
+		if (this.arrayPool_.length) {
+			return this.arrayPool_.pop();
+		} else {
+			return [];
+		}
 	};
 
 
 	JstProcessor.prototype.recycleArray_ = function(array) {
-	  arrayClear(array);
-	  this.arrayPool_.push(array);
+		arrayClear(array);
+		this.arrayPool_.push(array);
 	};
 
 	/**
@@ -1393,44 +1394,45 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {Element} template
 	 */
 	JstProcessor.prototype.jstProcessOuter_ = function(context, template) {
-	  var me = this;
+		var me = this;
 
-	  var jstAttributes = me.jstAttributes_(template);
-	  if (MAPS_DEBUG && me.debugging_) {
-	    me.logState_('Outer', template, jstAttributes.jstAttributeValues);
-	  }
-
-	  var transclude = jstAttributes[ATT_transclude];
-	  if (transclude) {
-
-		// TAF
-		if (transclude.charAt(0) !== STRING_pound) {
-			// Assume the value of the attribute is a JavaScript expression
-			transclude=context.jsexec(jsEvalToFunction(transclude),template);
-		}
-		else {
-			// This is a literal ID
-			transclude=transclude.substring(1);
+		var jstAttributes = me.jstAttributes_(template);
+		if (MAPS_DEBUG && me.debugging_) {
+			me.logState_('Outer', template, jstAttributes.jstAttributeValues);
 		}
 
-	    var tr = jstGetTemplate(transclude);
-	    if (tr) {
-	      domReplaceChild(tr, template);
-	      var call = me.createArray_();
-	      call.push(me.jstProcessOuter_, context, tr);
-	      me.push_(call);
-	    } else {
-	      domRemoveNode(template);
-	    }
-	    return;
-	  }
+		var transclude = jstAttributes[ATT_transclude];
+		if (transclude) {
 
-	  var select = jstAttributes[ATT_select];
-	  if (select) {
-	    me.jstSelect_(context, template, select);
-	  } else {
-	    me.jstProcessInner_(context, template);
-	  }
+			// TAF
+			if (transclude.charAt(0) !== STRING_pound) {
+				// Assume the value of the attribute is a JavaScript expression
+				transclude=context.jsexec(
+					jsEvalToFunction(transclude),template);
+			}
+			else {
+				// This is a literal ID
+				transclude=transclude.substring(1);
+			}
+
+			var tr = jstGetTemplate(transclude);
+			if (tr) {
+				domReplaceChild(tr, template);
+				var call = me.createArray_();
+				call.push(me.jstProcessOuter_, context, tr);
+				me.push_(call);
+			} else {
+				domRemoveNode(template);
+			}
+			return;
+		}
+
+		var select = jstAttributes[ATT_select];
+		if (select) {
+			me.jstSelect_(context, template, select);
+		} else {
+			me.jstProcessInner_(context, template);
+		}
 	};
 
 
@@ -1447,66 +1449,66 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {Element} template
 	 */
 	JstProcessor.prototype.jstProcessInner_ = function(context, template) {
-	  var me = this;
+		var me = this;
 
-	  var jstAttributes = me.jstAttributes_(template);
-	  if (MAPS_DEBUG && me.debugging_) {
-	    me.logState_('Inner', template, jstAttributes.jstAttributeValues);
-	  }
+		var jstAttributes = me.jstAttributes_(template);
+		if (MAPS_DEBUG && me.debugging_) {
+			me.logState_('Inner', template, jstAttributes.jstAttributeValues);
+		}
 
-	  // TAF: Set the ID on the node. This allows cloned template nodes to have
-	  // a document-unique ID that doesn't conflict with the original. First
-	  // we remove any IDs to avoid conflicts if this was a cloned template.
-	  if (!me.inplace)
-	      removeID(template);
+		// TAF: Set the ID on the node. This allows cloned template nodes to have
+		// a document-unique ID that doesn't conflict with the original. First
+		// we remove any IDs to avoid conflicts if this was a cloned template.
+		if (!me.inplace)
+			removeID(template);
 
-	  // TAF: Insert statically defined ID
-  	  var id = jstAttributes[ATT_id];
-	  if (id) {
-        domSetAttribute(template, STRING_id, id);
-	  }
+		// TAF: Insert statically defined ID
+		var id = jstAttributes[ATT_id];
+		if (id) {
+			domSetAttribute(template, STRING_id, id);
+		}
 
-	  // TAF: Insert ID by executing ID expression
-  	  var idexpr = jstAttributes[ATT_idexpr];
-	  if (idexpr) {
-		id=context.jsexec(idexpr,template);
-		if (id)
-	        domSetAttribute(template,STRING_id,id);
-	  }
+		// TAF: Insert ID by executing ID expression
+		var idexpr = jstAttributes[ATT_idexpr];
+		if (idexpr) {
+			id=context.jsexec(idexpr,template);
+			if (id)
+				domSetAttribute(template,STRING_id,id);
+		}
 
-	  // NOTE(mesch): See NOTE on ATT_content why this is a separate
-	  // attribute, and not a special value in ATT_values.
-	  var display = jstAttributes[ATT_display];
-	  if (display) {
-	    var shouldDisplay = context.jsexec(display, template);
-	    if (MAPS_DEBUG && me.debugging_) {
-	      me.logs_.push(ATT_display + ': ' + shouldDisplay + '<br/>');
-	    }
-	    if (!shouldDisplay) {
-	      displayNone(template);
-	      return;
-	    }
-	    displayDefault(template);
-	  }
+		// NOTE(mesch): See NOTE on ATT_content why this is a separate
+		// attribute, and not a special value in ATT_values.
+		var display = jstAttributes[ATT_display];
+		if (display) {
+			var shouldDisplay = context.jsexec(display, template);
+			if (MAPS_DEBUG && me.debugging_) {
+				me.logs_.push(ATT_display + ': ' + shouldDisplay + '<br/>');
+			}
+			if (!shouldDisplay) {
+				displayNone(template);
+				return;
+			}
+			displayDefault(template);
+		}
 
-	  // NOTE(mesch): jsvars is evaluated before jsvalues, because it's
-	  // more useful to be able to use var values in attribute value
-	  // expressions than vice versa.
-	  var values = jstAttributes[ATT_vars];
-	  if (values) {
-	    me.jstVars_(context, template, values);
-	  }
+		// NOTE(mesch): jsvars is evaluated before jsvalues, because it's
+		// more useful to be able to use var values in attribute value
+		// expressions than vice versa.
+		var values = jstAttributes[ATT_vars];
+		if (values) {
+			me.jstVars_(context, template, values);
+		}
 
-	  values = jstAttributes[ATT_values];
-	  if (values) {
-	    me.jstValues_(context, template, values);
-	  }
+		values = jstAttributes[ATT_values];
+		if (values) {
+			me.jstValues_(context, template, values);
+		}
 
-	  // TAF
-	  var data = jstAttributes[ATT_data];
-	  if (data) {
-		me.jstData_(context, template, data);
-	  }
+		// TAF
+		var data = jstAttributes[ATT_data];
+		if (data) {
+			me.jstData_(context, template, data);
+		}
 
 		// TAF:
 		// Allow attachment of functions directly on elements
@@ -1523,77 +1525,77 @@ GOOGLE.templates=(function(jQuery) {
 			});
 		}
 
-	  // Evaluate expressions immediately. Useful for hooking callbacks
-	  // into jstemplates.
-	  //
-	  // NOTE(mesch): Evaluation order is sometimes significant, e.g. when
-	  // the expression evaluated in jseval relies on the values set in
-	  // jsvalues, so it needs to be evaluated *after*
-	  // jsvalues. TODO(mesch): This is quite arbitrary, it would be
-	  // better if this would have more necessity to it.
-	  var expressions = jstAttributes[ATT_eval];
-	  if (expressions) {
-	    for (var i = 0, I = jsLength(expressions); i < I; ++i) {
-	      context.jsexec(expressions[i], template);
-	    }
-	  }
+		// Evaluate expressions immediately. Useful for hooking callbacks
+		// into jstemplates.
+		//
+		// NOTE(mesch): Evaluation order is sometimes significant, e.g. when
+		// the expression evaluated in jseval relies on the values set in
+		// jsvalues, so it needs to be evaluated *after*
+		// jsvalues. TODO(mesch): This is quite arbitrary, it would be
+		// better if this would have more necessity to it.
+		var expressions = jstAttributes[ATT_eval];
+		if (expressions) {
+			for (var i = 0, I = jsLength(expressions); i < I; ++i) {
+				context.jsexec(expressions[i], template);
+			}
+		}
 
-	  // TAF
-	  var show = jstAttributes[ATT_show];
-	  if (show) {
-	    var shouldShow = context.jsexec(show, template);
-	    if (MAPS_DEBUG && me.debugging_) {
-	      me.logs_.push(ATT_show + ': ' + shouldShow + '<br/>');
-	    }
-	    if (shouldShow) {
-	      displayDefault(template);
-	    }
-	  }
+		// TAF
+		var show = jstAttributes[ATT_show];
+		if (show) {
+			var shouldShow = context.jsexec(show, template);
+			if (MAPS_DEBUG && me.debugging_) {
+				me.logs_.push(ATT_show + ': ' + shouldShow + '<br/>');
+			}
+			if (shouldShow) {
+				displayDefault(template);
+			}
+		}
 
-	  // TAF
-	  var hide = jstAttributes[ATT_hide];
-	  if (hide) {
-	    var shouldHide = context.jsexec(hide, template);
-	    if (MAPS_DEBUG && me.debugging_) {
-	      me.logs_.push(ATT_hide + ': ' + shouldHide + '<br/>');
-	    }
-	    if (shouldHide) {
-	      displayNone(template);
-	    }
-	  }
+		// TAF
+		var hide = jstAttributes[ATT_hide];
+		if (hide) {
+			var shouldHide = context.jsexec(hide, template);
+			if (MAPS_DEBUG && me.debugging_) {
+				me.logs_.push(ATT_hide + ': ' + shouldHide + '<br/>');
+			}
+			if (shouldHide) {
+				displayNone(template);
+			}
+		}
 
-	  var skip = jstAttributes[ATT_skip];
-	  if (skip) {
-	    var shouldSkip = context.jsexec(skip, template);
-	    if (MAPS_DEBUG && me.debugging_) {
-	      me.logs_.push(ATT_skip + ': ' + shouldSkip + '<br/>');
-	    }
-	    if (shouldSkip) return;
-	  }
+		var skip = jstAttributes[ATT_skip];
+		if (skip) {
+			var shouldSkip = context.jsexec(skip, template);
+			if (MAPS_DEBUG && me.debugging_) {
+				me.logs_.push(ATT_skip + ': ' + shouldSkip + '<br/>');
+			}
+			if (shouldSkip) return;
+		}
 
-	  // NOTE(mesch): content is a separate attribute, instead of just a
-	  // special value mentioned in values, for two reasons: (1) it is
-	  // fairly common to have only mapped content, and writing
-	  // content="expr" is shorter than writing values="content:expr", and
-	  // (2) the presence of content actually terminates traversal, and we
-	  // need to check for that. Display is a separate attribute for a
-	  // reason similar to the second, in that its presence *may*
-	  // terminate traversal.
-	  var content = jstAttributes[ATT_content];
-	  if (content) {
-	    me.jstContent_(context, template, content, jstAttributes);
+		// NOTE(mesch): content is a separate attribute, instead of just a
+		// special value mentioned in values, for two reasons: (1) it is
+		// fairly common to have only mapped content, and writing
+		// content="expr" is shorter than writing values="content:expr", and
+		// (2) the presence of content actually terminates traversal, and we
+		// need to check for that. Display is a separate attribute for a
+		// reason similar to the second, in that its presence *may*
+		// terminate traversal.
+		var content = jstAttributes[ATT_content];
+		if (content) {
+			me.jstContent_(context, template, content, jstAttributes);
 
-	  } else {
-	    // Newly generated children should be ignored, so we explicitly
-	    // store the children to be processed.
-	    var queue = me.createArray_();
-	    for (var c = template.firstChild; c; c = c.nextSibling) {
-	      if (c.nodeType == DOM_ELEMENT_NODE) {
-	        queue.push(me.jstProcessOuter_, context, c);
-	      }
-	    }
-	    if (queue.length) me.push_(queue);
-	  }
+		} else {
+			// Newly generated children should be ignored, so we explicitly
+			// store the children to be processed.
+			var queue = me.createArray_();
+			for (var c = template.firstChild; c; c = c.nextSibling) {
+				if (c.nodeType == DOM_ELEMENT_NODE) {
+					queue.push(me.jstProcessOuter_, context, c);
+				}
+			}
+			if (queue.length) me.push_(queue);
+		}
 	};
 
 
@@ -1617,112 +1619,112 @@ GOOGLE.templates=(function(jQuery) {
 	 * type checks.
 	 */
 	JstProcessor.prototype.jstSelect_ = function(context, template, select) {
-	  var me = this;
+		var me = this;
 
-	  var value = context.jsexec(select, template);
+		var value = context.jsexec(select, template);
 
-	  // Enable reprocessing: if this template is reprocessed, then only
-	  // fill the section instance here. Otherwise do the cardinal
-	  // processing of a new template.
-	  var instance = domGetAttribute(template, ATT_instance);
+		// Enable reprocessing: if this template is reprocessed, then only
+		// fill the section instance here. Otherwise do the cardinal
+		// processing of a new template.
+		var instance = domGetAttribute(template, ATT_instance);
 
-	  var instanceLast = false;
-	  if (instance) {
-	    if (instance.charAt(0) == CHAR_asterisk) {
-	      instance = parseInt10(instance.substr(1));
-	      instanceLast = true;
-	    } else {
-	      instance = parseInt10(/** @type string */(instance));
-	    }
-	  }
+		var instanceLast = false;
+		if (instance) {
+			if (instance.charAt(0) == CHAR_asterisk) {
+				instance = parseInt10(instance.substr(1));
+				instanceLast = true;
+			} else {
+				instance = parseInt10(/** @type string */(instance));
+			}
+		}
 
-	  // The expression value instanceof Array is occasionally false for
-	  // arrays, seen in Firefox. Thus we recognize an array as an object
-	  // which is not null that has a length property. Notice that this
-	  // also matches input data with a length property, so this property
-	  // name should be avoided in input data.
-	  var multiple = isArray(value);
-	  var count = multiple ? jsLength(value) : 1;
-	  var multipleEmpty = (multiple && count == 0);
+		// The expression value instanceof Array is occasionally false for
+		// arrays, seen in Firefox. Thus we recognize an array as an object
+		// which is not null that has a length property. Notice that this
+		// also matches input data with a length property, so this property
+		// name should be avoided in input data.
+		var multiple = isArray(value);
+		var count = multiple ? jsLength(value) : 1;
+		var multipleEmpty = (multiple && count == 0);
 
-	  if (multiple) {
-	    if (multipleEmpty) {
-	      // For an empty array, keep the first template instance and mark
-	      // it last. Remove all other template instances.
-	      if (!instance) {
-	        domSetAttribute(template, ATT_instance, STRING_asteriskzero);
-	        displayNone(template);
-	      } else {
-	        domRemoveNode(template);
-	      }
+		if (multiple) {
+			if (multipleEmpty) {
+				// For an empty array, keep the first template instance and mark
+				// it last. Remove all other template instances.
+				if (!instance) {
+					domSetAttribute(template, ATT_instance, STRING_asteriskzero);
+					displayNone(template);
+				} else {
+					domRemoveNode(template);
+				}
 
-	    } else {
-	      displayDefault(template);
-	      // For a non empty array, create as many template instances as
-	      // are needed. If the template is first processed, as many
-	      // template instances are needed as there are values in the
-	      // array. If the template is reprocessed, new template instances
-	      // are only needed if there are more array values than template
-	      // instances. Those additional instances are created by
-	      // replicating the last template instance.
-	      //
-	      // When the template is first processed, there is no jsinstance
-	      // attribute. This is indicated by instance === null, except in
-	      // opera it is instance === "". Notice also that the === is
-	      // essential, because 0 == "", presumably via type coercion to
-	      // boolean.
-	      if (instance === null || instance === STRING_empty ||
-	          (instanceLast && instance < count - 1)) {
-	        // A queue of calls to push.
-	        var queue = me.createArray_();
+			} else {
+				displayDefault(template);
+				// For a non empty array, create as many template instances as
+				// are needed. If the template is first processed, as many
+				// template instances are needed as there are values in the
+				// array. If the template is reprocessed, new template instances
+				// are only needed if there are more array values than template
+				// instances. Those additional instances are created by
+				// replicating the last template instance.
+				//
+				// When the template is first processed, there is no jsinstance
+				// attribute. This is indicated by instance === null, except in
+				// opera it is instance === "". Notice also that the === is
+				// essential, because 0 == "", presumably via type coercion to
+				// boolean.
+				if (instance === null || instance === STRING_empty ||
+					(instanceLast && instance < count - 1)) {
+					// A queue of calls to push.
+					var queue = me.createArray_();
 
-	        var instancesStart = instance || 0;
-	        var i, I, clone;
-	        for (i = instancesStart, I = count - 1; i < I; ++i) {
-	          var node = domCloneNode(template);
-	          domInsertBefore(node, template);
+					var instancesStart = instance || 0;
+					var i, I, clone;
+					for (i = instancesStart, I = count - 1; i < I; ++i) {
+						var node = domCloneNode(template);
+						domInsertBefore(node, template);
 
-	          jstSetInstance(/** @type Element */(node), value, i);
-	          clone = context.clone(value[i], i, count);
+						jstSetInstance(/** @type Element */(node), value, i);
+						clone = context.clone(value[i], i, count);
 
-	          queue.push(me.jstProcessInner_, clone, node,
-	                     JsEvalContext.recycle, clone, null);
+						queue.push(me.jstProcessInner_, clone, node,
+						JsEvalContext.recycle, clone, null);
 
-	        }
-	        // Push the originally present template instance last to keep
-	        // the order aligned with the DOM order, because the newly
-	        // created template instances are inserted *before* the
-	        // original instance.
-	        jstSetInstance(template, value, i);
-	        clone = context.clone(value[i], i, count);
-	        queue.push(me.jstProcessInner_, clone, template,
-	                   JsEvalContext.recycle, clone, null);
-	        me.push_(queue);
-	      } else if (instance < count) {
-	        var v = value[instance];
+					}
+					// Push the originally present template instance last to keep
+					// the order aligned with the DOM order, because the newly
+					// created template instances are inserted *before* the
+					// original instance.
+					jstSetInstance(template, value, i);
+					clone = context.clone(value[i], i, count);
+					queue.push(me.jstProcessInner_, clone, template,
+					JsEvalContext.recycle, clone, null);
+					me.push_(queue);
+				} else if (instance < count) {
+					var v = value[instance];
 
-	        jstSetInstance(template, value, instance);
-	        var clone = context.clone(v, instance, count);
-	        var queue = me.createArray_();
-	        queue.push(me.jstProcessInner_, clone, template,
-	                   JsEvalContext.recycle, clone, null);
-	        me.push_(queue);
-	      } else {
-	        domRemoveNode(template);
-	      }
-	    }
-	  } else {
-	    if (value == null) {
-	      displayNone(template);
-	    } else {
-	      displayDefault(template);
-	      var clone = context.clone(value, 0, 1);
-	      var queue = me.createArray_();
-	      queue.push(me.jstProcessInner_, clone, template,
-	                 JsEvalContext.recycle, clone, null);
-	      me.push_(queue);
-	    }
-	  }
+					jstSetInstance(template, value, instance);
+					var clone = context.clone(v, instance, count);
+					var queue = me.createArray_();
+					queue.push(me.jstProcessInner_, clone, template,
+					JsEvalContext.recycle, clone, null);
+					me.push_(queue);
+				} else {
+					domRemoveNode(template);
+				}
+			}
+		} else {
+			if (value == null) {
+				displayNone(template);
+			} else {
+				displayDefault(template);
+				var clone = context.clone(value, 0, 1);
+				var queue = me.createArray_();
+				queue.push(me.jstProcessInner_, clone, template,
+				JsEvalContext.recycle, clone, null);
+				me.push_(queue);
+			}
+		}
 	};
 
 
@@ -1743,11 +1745,11 @@ GOOGLE.templates=(function(jQuery) {
 	 * the value returned by jsexec is assigned to.
 	 */
 	JstProcessor.prototype.jstVars_ = function(context, template, values) {
-	  for (var i = 0, I = jsLength(values); i < I; i += 2) {
-	    var label = values[i];
-	    var value = context.jsexec(values[i+1], template);
-	    context.setVariable(label, value);
-	  }
+		for (var i = 0, I = jsLength(values); i < I; i += 2) {
+			var label = values[i];
+			var value = context.jsexec(values[i+1], template);
+			context.setVariable(label, value);
+		}
 	};
 
 
@@ -1767,13 +1769,13 @@ GOOGLE.templates=(function(jQuery) {
 	 * the value returned by jsexec is assigned to.
 	 */
 	JstProcessor.prototype.jstData_ = function(context, template, values) {
-	  for (var i = 0, I = jsLength(values); i < I; i += 2) {
-	    var label = values[i];
-	    var value = context.jsexec(values[i+1], template);
+		for (var i = 0, I = jsLength(values); i < I; i += 2) {
+			var label = values[i];
+			var value = context.jsexec(values[i+1], template);
 
-	    // TAF
-		jQuery(template).data(label,value);
-	  }
+			// TAF
+			jQuery(template).data(label,value);
+		}
 	};
 
 
@@ -1797,50 +1799,50 @@ GOOGLE.templates=(function(jQuery) {
 	 * determines where the value returned by jsexec is assigned to.
 	 */
 	JstProcessor.prototype.jstValues_ = function(context, template, values) {
-	  for (var i = 0, I = jsLength(values); i < I; i += 2) {
-	    var label = values[i];
-	    var value = context.jsexec(values[i+1], template);
+		for (var i = 0, I = jsLength(values); i < I; i += 2) {
+			var label = values[i];
+			var value = context.jsexec(values[i+1], template);
 
-	    if (label.charAt(0) == CHAR_dollar) {
-	      // A jsvalues entry whose name starts with $ sets a local
-	      // variable.
-	      context.setVariable(label, value);
+			if (label.charAt(0) == CHAR_dollar) {
+				// A jsvalues entry whose name starts with $ sets a local
+				// variable.
+				context.setVariable(label, value);
 
-	    } else if (label.charAt(0) == CHAR_period) {
-	      // A jsvalues entry whose name starts with . sets a property of
-	      // the current template node. The name may have further dot
-	      // separated components, which are translated into namespace
-	      // objects. This specifically allows to set properties on .style
-	      // using jsvalues. NOTE(mesch): Setting the style attribute has
-	      // no effect in IE and hence should not be done anyway.
-	      var nameSpaceLabel = label.substr(1).split(CHAR_period);
-	      var nameSpaceObject = template;
-	      var nameSpaceDepth = jsLength(nameSpaceLabel);
-	      for (var j = 0, J = nameSpaceDepth - 1; j < J; ++j) {
-	        var jLabel = nameSpaceLabel[j];
-	        if (!nameSpaceObject[jLabel]) {
-	          nameSpaceObject[jLabel] = {};
-	        }
-	        nameSpaceObject = nameSpaceObject[jLabel];
-	      }
-	      nameSpaceObject[nameSpaceLabel[nameSpaceDepth - 1]] = value;
+			} else if (label.charAt(0) == CHAR_period) {
+				// A jsvalues entry whose name starts with . sets a property of
+				// the current template node. The name may have further dot
+				// separated components, which are translated into namespace
+				// objects. This specifically allows to set properties on .style
+				// using jsvalues. NOTE(mesch): Setting the style attribute has
+				// no effect in IE and hence should not be done anyway.
+				var nameSpaceLabel = label.substr(1).split(CHAR_period);
+				var nameSpaceObject = template;
+				var nameSpaceDepth = jsLength(nameSpaceLabel);
+				for (var j = 0, J = nameSpaceDepth - 1; j < J; ++j) {
+					var jLabel = nameSpaceLabel[j];
+					if (!nameSpaceObject[jLabel]) {
+						nameSpaceObject[jLabel] = {};
+					}
+					nameSpaceObject = nameSpaceObject[jLabel];
+				}
+				nameSpaceObject[nameSpaceLabel[nameSpaceDepth - 1]] = value;
 
-	    } else if (label) {
-	      // Any other jsvalues entry sets an attribute of the current
-	      // template node.
-	      if (typeof value == TYPE_boolean) {
-	        // Handle boolean values that are set as attributes specially,
-	        // according to the XML/HTML convention.
-	        if (value) {
-	          domSetAttribute(template, label, label);
-	        } else {
-	          domRemoveAttribute(template, label);
-	        }
-	      } else {
-	        domSetAttribute(template, label, STRING_empty + value);
-	      }
-	    }
-	  }
+			} else if (label) {
+				// Any other jsvalues entry sets an attribute of the current
+				// template node.
+				if (typeof value == TYPE_boolean) {
+					// Handle boolean values that are set as attributes specially,
+					// according to the XML/HTML convention.
+					if (value) {
+						domSetAttribute(template, label, label);
+					} else {
+						domRemoveAttribute(template, label);
+					}
+				} else {
+					domSetAttribute(template, label, STRING_empty + value);
+				}
+			}
+		}
 	};
 
 
@@ -1857,58 +1859,59 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {Function} content Processed value of the jscontent
 	 * attribute.
 	 */
-	JstProcessor.prototype.jstContent_ = function(context, template, content, jstAttributes) {
-	  // NOTE(mesch): Profiling shows that this method costs significant
-	  // time. In jstemplate_perf.html, it's about 50%. I tried to replace
-	  // by HTML escaping and assignment to innerHTML, but that was even
-	  // slower.
+	JstProcessor.prototype.jstContent_ = function(context, template, content,
+			jstAttributes) {
+		// NOTE(mesch): Profiling shows that this method costs significant
+		// time. In jstemplate_perf.html, it's about 50%. I tried to replace
+		// by HTML escaping and assignment to innerHTML, but that was even
+		// slower.
 
-	  // TAF: Let jQuery convert to string below when necessary
-	  var value = /*STRING_empty +*/ context.jsexec(content, template);
+		// TAF: Let jQuery convert to string below when necessary
+		var value = /*STRING_empty +*/ context.jsexec(content, template);
 
-	  // Prevent flicker when refreshing a template and the value doesn't
-	  // change.
-	  if (template.innerHTML == value) {
-	    return;
-	  }
+		// Prevent flicker when refreshing a template and the value doesn't
+		// change.
+		if (template.innerHTML == value) {
+			return;
+		}
 
-	  // TAF: Allow preservation of existing text if value is null by
-	  // specifying jst:overwrite=false
-	  var overwrite = jstAttributes[ATT_overwrite];
+		// TAF: Allow preservation of existing text if value is null by
+		// specifying jst:overwrite=false
+		var overwrite = jstAttributes[ATT_overwrite];
 
-	  var clearContents=true;
-	  if (overwrite) {
-		  clearContents=(overwrite=="true");
-	  }
+		var clearContents=true;
+		if (overwrite) {
+			clearContents=(overwrite=="true");
+		}
 
-	  if (clearContents) {
-		  while (template.firstChild) {
-			domRemoveNode(template.firstChild);
-		  }
-	  }
+		if (clearContents) {
+			while (template.firstChild) {
+				domRemoveNode(template.firstChild);
+			}
+		}
 
-	  // TAF: Allow setting of HTML content
-//	  var t = domCreateTextNode(this.document_, value);
-//	  domAppendChild(template, t);
-	  
-	  // TAF
-//	  if (typeof value==="string" && $.trim(value[0])==="<") {
-//		  template.innerHTML = value;
-//	  }
-//	  else {
-//		  var t = domCreateTextNode(this.document_, value);
-//		  domAppendChild(template, t);
-//	  }
+		// TAF: Allow setting of HTML content
+		//	  var t = domCreateTextNode(this.document_, value);
+		//	  domAppendChild(template, t);
 
-	  // TAF
-//	  if (!value)
-//		  value=attr("jst:defaultValue");
+		// TAF
+		//	  if (typeof value==="string" && $.trim(value[0])==="<") {
+		//		  template.innerHTML = value;
+		//	  }
+		//	  else {
+		//		  var t = domCreateTextNode(this.document_, value);
+		//		  domAppendChild(template, t);
+		//	  }
 
-	  // TAF: Simply let jQuery handle the insertion
-//	  if (value || (value==null && !ignoreEmpty)) {
-	  if (clearContents) {
-		  jQuery(template).append(value);
-	  }
+		// TAF
+		//	  if (!value)
+		//		  value=attr("jst:defaultValue");
+
+		// TAF: Simply let jQuery handle the insertion
+		//	  if (value || (value==null && !ignoreEmpty)) {
+		if (clearContents) {
+			jQuery(template).append(value);
+		}
 	};
 
 
@@ -1923,16 +1926,16 @@ GOOGLE.templates=(function(jQuery) {
 	 * processing attribute values of the node as properties.
 	 */
 	JstProcessor.prototype.jstAttributes_ = function(template) {
-	  if (template[PROP_jstcache]) {
-	    return template[PROP_jstcache];
-	  }
+		if (template[PROP_jstcache]) {
+			return template[PROP_jstcache];
+		}
 
-	  var jstid = domGetAttribute(template, ATT_jstcache);
-	  if (jstid) {
-	    return template[PROP_jstcache] = JstProcessor.jstcache_[jstid];
-	  }
+		var jstid = domGetAttribute(template, ATT_jstcache);
+		if (jstid) {
+			return template[PROP_jstcache] = JstProcessor.jstcache_[jstid];
+		}
 
-	  return JstProcessor.prepareNode_(template);
+		return JstProcessor.prepareNode_(template);
 	};
 
 
@@ -1957,25 +1960,25 @@ GOOGLE.templates=(function(jQuery) {
 		if (!name)
 			return null;
 
-	  var doc = document;
-	  var section;
-	  if (opt_loadHtmlFn) {
-	    section = jstLoadTemplateIfNotPresent(doc, name, opt_loadHtmlFn);
-	  } else {
-	    section = domGetElementById(doc, name);
-	  }
+		var doc = document;
+		var section;
+		if (opt_loadHtmlFn) {
+			section = jstLoadTemplateIfNotPresent(doc, name, opt_loadHtmlFn);
+		} else {
+			section = domGetElementById(doc, name);
+		}
 
-	  // TAF
-//	  if (section) {
-//	    JstProcessor.prepareTemplate_(section);
-//	    var ret = domCloneElement(section);
-//	    domRemoveAttribute(ret, STRING_id);
-//	    return ret;
-//	  } else {
-//	    return null;
-//	  }
-	  // TAF: Factor out so we can reuse directly
-	  return jstCloneTemplate(section);
+		// TAF
+		//	  if (section) {
+		//	    JstProcessor.prepareTemplate_(section);
+		//	    var ret = domCloneElement(section);
+		//	    domRemoveAttribute(ret, STRING_id);
+		//	    return ret;
+		//	  } else {
+		//	    return null;
+		//	  }
+		// TAF: Factor out so we can reuse directly
+		return jstCloneTemplate(section);
 	}
 
 
@@ -1991,9 +1994,9 @@ GOOGLE.templates=(function(jQuery) {
 	 * can be found by ID, hence it's a Element.)
 	 */
 	function jstGetTemplateOrDie(name, opt_loadHtmlFn) {
-	  var x = jstGetTemplate(name, opt_loadHtmlFn);
-	  check(x !== null);
-	  return /** @type Element */(x);
+		var x = jstGetTemplate(name, opt_loadHtmlFn);
+		check(x !== null);
+		return /** @type Element */(x);
 	}
 
 
@@ -2011,18 +2014,18 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Element} The node whose id is 'name'
 	 */
 	function jstLoadTemplateIfNotPresent(doc, name, loadHtmlFn, opt_target) {
-	  var section = domGetElementById(doc, name);
-	  if (section) {
-	    return section;
-	  }
-	  // Load any necessary HTML and try again.
-	  jstLoadTemplate_(doc, loadHtmlFn(), opt_target || STRING_jsts);
-	  var section = domGetElementById(doc, name);
-	  if (!section) {
-	    log("Error: jstGetTemplate was provided with opt_loadHtmlFn, " +
-		"but that function did not provide the id '" + name + "'.");
-	  }
-	  return /** @type Element */(section);
+		var section = domGetElementById(doc, name);
+		if (section) {
+			return section;
+		}
+		// Load any necessary HTML and try again.
+		jstLoadTemplate_(doc, loadHtmlFn(), opt_target || STRING_jsts);
+		var section = domGetElementById(doc, name);
+		if (!section) {
+			log("Error: jstGetTemplate was provided with opt_loadHtmlFn, " +
+				"but that function did not provide the id '" + name + "'.");
+		}
+		return /** @type Element */(section);
 	}
 
 
@@ -2042,20 +2045,20 @@ GOOGLE.templates=(function(jQuery) {
 	 *   exist.
 	 */
 	function jstLoadTemplate_(doc, html, targetId) {
-	  var existing_target = domGetElementById(doc, targetId);
-	  var target;
-	  if (!existing_target) {
-	    target = domCreateElement(doc, STRING_div);
-	    target.id = targetId;
-	    displayNone(target);
-	    positionAbsolute(target);
-	    domAppendChild(doc.body, target);
-	  } else {
-	    target = existing_target;
-	  }
-	  var div = domCreateElement(doc, STRING_div);
-	  target.appendChild(div);
-	  div.innerHTML = html;
+		var existing_target = domGetElementById(doc, targetId);
+		var target;
+		if (!existing_target) {
+			target = domCreateElement(doc, STRING_div);
+			target.id = targetId;
+			displayNone(target);
+			positionAbsolute(target);
+			domAppendChild(doc.body, target);
+		} else {
+			target = existing_target;
+		}
+		var div = domCreateElement(doc, STRING_div);
+		target.appendChild(div);
+		div.innerHTML = html;
 	}
 
 
@@ -2071,11 +2074,11 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {number} index The index of this template node in values.
 	 */
 	function jstSetInstance(template, values, index) {
-	  if (index == jsLength(values) - 1) {
-	    domSetAttribute(template, ATT_instance, CHAR_asterisk + index);
-	  } else {
-	    domSetAttribute(template, ATT_instance, STRING_empty + index);
-	  }
+		if (index == jsLength(values) - 1) {
+			domSetAttribute(template, ATT_instance, CHAR_asterisk + index);
+		} else {
+			domSetAttribute(template, ATT_instance, STRING_empty + index);
+		}
 	}
 
 
@@ -2086,24 +2089,26 @@ GOOGLE.templates=(function(jQuery) {
 	 * @param {Object} jstAttributeValues The jst attributes of the template node.
 	 */
 	JstProcessor.prototype.logState_ = function(
-	    caller, template, jstAttributeValues) {
-	  if (MAPS_DEBUG) {
-	    var msg = '<table>';
-	    msg += '<caption>' + caller + '</caption>';
-	    msg += '<tbody>';
-	    if (template.id) {
-	      msg += '<tr><td>' + 'id:' + '</td><td>' + template.id + '</td></tr>';
-	    }
-	    if (template.name) {
-	      msg += '<tr><td>' + 'name:' + '</td><td>' + template.name + '</td></tr>';
-	    }
-	    if (jstAttributeValues) {
-	      msg += '<tr><td>' + 'attr:' +
-	      '</td><td>' + jsToSource(jstAttributeValues) + '</td></tr>';
-	    }
-	    msg += '</tbody></table><br/>';
-	    this.logs_.push(msg);
-	  }
+	caller, template, jstAttributeValues) {
+		if (MAPS_DEBUG) {
+			var msg = '<table>';
+			msg += '<caption>' + caller + '</caption>';
+			msg += '<tbody>';
+			if (template.id) {
+				msg += '<tr><td>' + 'id:' + '</td><td>' +
+					template.id + '</td></tr>';
+			}
+			if (template.name) {
+				msg += '<tr><td>' + 'name:' + '</td><td>' +
+					template.name + '</td></tr>';
+			}
+			if (jstAttributeValues) {
+				msg += '<tr><td>' + 'attr:' +
+					'</td><td>' + jsToSource(jstAttributeValues) + '</td></tr>';
+			}
+			msg += '</tbody></table><br/>';
+			this.logs_.push(msg);
+		}
 	};
 
 
@@ -2112,33 +2117,34 @@ GOOGLE.templates=(function(jQuery) {
 	 * @return {Array.<string>} The processing logs.
 	 */
 	JstProcessor.prototype.getLogs = function() {
-	  return this.logs_;
+		return this.logs_;
 	};
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Added functions
-////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	// Added functions
+	////////////////////////////////////////////////////////////////////////////
 
 	function removeID(element) {
-	    domRemoveAttribute(element,STRING_id);
+		domRemoveAttribute(element,STRING_id);
 	}
 
 
 	// Factored from function jstGetTemplate(name, opt_loadHtmlFn)
 	function jstCloneTemplate(section) {
-	  if (section) {
-	    JstProcessor.prepareTemplate_(section);
-	    var ret = domCloneElement(section);
-	    removeID(ret);
-	    return ret;
-	  } else {
-	    return null;
-	  }
+		if (section) {
+			JstProcessor.prepareTemplate_(section);
+			var ret = domCloneElement(section);
+			removeID(ret);
+			return ret;
+		} else {
+			return null;
+		}
 	}
 
 	// TAF: Alias for function jstProcess(context, template, opt_debugging) {
-	function processTemplate(context, template, parentContext, inplace, opt_debugging) {
+	function processTemplate(context, template, parentContext, inplace,
+			opt_debugging) {
 		var created=false;
 		var createdParent=false;
 		try {
@@ -2190,28 +2196,28 @@ GOOGLE.templates=(function(jQuery) {
 	};
 
 
-////////////////////////////////////////////////////////////////////////////////
-// jQuery plugin functions
-////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	// jQuery plugin functions
+	////////////////////////////////////////////////////////////////////////////
 
 	jQuery.fn.template = function(data, inplace, parentData) {
 		return this.map(
-			function(index,element) {
-				var template;
+		function(index,element) {
+			var template;
 
-				if (inplace) {
-					template=element;
-				}
-				else {
-					template=jstCloneTemplate(element);
-				}
+			if (inplace) {
+				template=element;
+			}
+			else {
+				template=jstCloneTemplate(element);
+			}
 
-				if (template) {
-					processTemplate(data,template,parentData,inplace,false);
-				}
+			if (template) {
+				processTemplate(data,template,parentData,inplace,false);
+			}
 
-				return template;
-			});
+			return template;
+		});
 	};
 
 	jQuery.fn.fillTemplate = function(data, parentData) {
@@ -2238,9 +2244,9 @@ GOOGLE.templates=(function(jQuery) {
 	};
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Public functions
-////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
+	// Public functions
+	////////////////////////////////////////////////////////////////////////////
 
 	var exports={
 
@@ -2249,7 +2255,7 @@ GOOGLE.templates=(function(jQuery) {
 		__jsEval: jsEval,
 
 		// Alias for function JsEvalContext(opt_data, opt_parent)
-//		EvalContext: JsEvalContext,
+		//		EvalContext: JsEvalContext,
 
 		// Alias for function JsTemplate(elem,true)
 		ClonedTemplate: function(element) {
