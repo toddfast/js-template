@@ -190,12 +190,21 @@ Of course, you don't have to refill a template with the same object it was origi
 
 # Reference
 
-The processing instructions that define the results of template processing are encoded as attributes in template HTML elements. There are 12 such special attributes: 
+There are four primary jQuery nethods in *js-template*:
 
-* `data-jst-content`,
+* `refillTemplate()`
+* `fillTemplate()`
+* `templateCallback()`
+* `removetemplateCallback()`
+
+The processing instructions that define the results of template processing are encoded as attributes in template HTML elements: 
+
+* `data-jst-content`
 * `data-jst-select`
 * `data-jst-if`
 * `data-jst-skip`
+* `data-jst-show`
+* `data-jst-hide`
 * `data-jst-include`
 * `data-jst-values`
 * `data-jst-vars`,
@@ -205,23 +214,147 @@ The processing instructions that define the results of template processing are e
 * `data-jst-overwrite`
 * `data-jst-data`
 
-In addition, there are two primary jQuery functions:
 
-* `refillTemplate()`
-* `fillTemplate()`
+## jQuery methods
 
-## Processing Environment
+### refillTemplate()
+
+```javascript
+$(<selector for template DOM element(s)>).refillTemplate(data [,parentData]);
+```
+
+Merges (and re-merges) template data with the selected template DOM node. The template DOM node will not be cloned; this merging occurs in-place. Data can be merged repeatedly and *js-template* will find the differences and modify the DOM tree accordingly. It is preferable to use this technique, including in-place templates, because it allows for fast, real-time updates without cloning or destroying large segments of the DOM.
+
+The `data` parameter is a normal JavaScript object whose properties will be used to fill the template with data.
+
+The `parentData` parameter is shared data that may be used as a secondary lookup.
+
+The return value is the processed template's DOM element. This element already exists in the DOM and any changes as a result of merging the data have already been rendered by the browser.
+
+### fillTemplate()
+
+```javascript
+$(<selector for template DOM element>).fillTemplate(data [,parentData]);
+```
+
+Clones the template, including all its event handlers, and merges the data. The return value of the method (the cloned DOM element) must be attached somewhere in the DOM to make the processed template visible.  This method should be used when the template is stored in a separate DOM node that will be cloned and attached elsewhere in the DOM as needed. In general, it's preferable to use `refillTemplate()` when possible because it allows data to be merged repeatedly to the same DOM elements.
+
+The `data` parameter is a normal JavaScript object whose properties will be used to fill the template with data.
+
+The `parentData` parameter is shared data that may be used as a secondary lookup.
+
+The return value is the processed and cloned template's DOM element. It must be attached to the DOM in order to be visible.
+
+Because cloned templates retain all of their attached event handlers and callback functions, you can efficiently attach event handlers to the template once in $(document).ready() and those event handlers will then be used for all instances of the template.
+
+For example, let's say we have a page like this:
+
+```html
+<div id="container">
+</div>
+
+<!-- A hidden container for all our templates -->
+<div id="templates" style="display: none;">
+  <a id="template1" href="javascript:void(0);">Click me!</a>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Attach an event handler to the template
+  $("#template1").click(function onTemplateClick(event) {
+    console.log("Clicked element: ",this);
+  });
+
+// The new template will have the click event handler
+$("#template1")
+  .fillTemplate()
+  .appendTo("#container");
+
+// This one too
+$("#template1")
+  .fillTemplate()
+  .appendTo("#container");
+});
+</script>
+```
+Loading the page results in this DOM structure:
+
+```html
+<div id="container">
+  <a href="javascript:void(0);">Click me!</a>
+  <a href="javascript:void(0);">Click me!</a>
+</div>
+
+<!-- A hidden container for all our templates -->
+<div id="templates" style="display: none;">
+  <a id="template1" href="javascript:void(0);">Click me!</a>
+</div>
+```
+and each of the child `a`s of `#container` will have the same `onclick` event that was bound to `#template1`, which when fired, will log the element that was clicked (available via `this` in the event handler) to the console.
+
+
+### templateCallback()
+
+```javascript
+$(<selector for template DOM element>).templateCallback(data [,parentData]);
+```
+
+Template callbacks are functions that are called as the corresponding nodes in the template are processed. They are extermely useful for tracking template processing from your page's script, for example inspecting data, modifying template processing, setting attributes and data, and so on.
+
+template, this.vars_, this.data_
+
+```html
+<div id="template">
+  <div class="row" data-jst-select="favs" data-jst-content="$this"></div>
+</div>
+```
+```javascript
+function onRowProcessed(vars, data) {
+  $(this)
+    .data("index",vars.$index)
+    .data("fave",data);
+}
+
+$(document).ready(function () {
+  $("#template .row").templateCallback(onRowProcessed)
+});
+```
+
+A callback function is called with the following:
+
+* `this` is a reference to the current DOM element being processed
+* `vars` parameter is an object containing all the variables available to `data-jst-vars` (and `data-jst-values`) attribute expressions:
+    * `$index`: The current index of the array being iterated over during `data-jst-select` processing
+    * `$length`: The length of the current array being iterated over during `data-jst-select` processing
+    * `$this`: The current data value being processed for this node
+    * `$top`: The top data context, i.e. the object that was passed to `(re)fillTemplate()`
+    * `$context`: The root instance of `JsContext` being used for template processing. (Advanced topic; see source code for more info)
+* `data` parameter is the current data value being processed for this node. It is the same object as the `$this` variable used inside the template, or the `vars.$this` property in the callback.
+
+Only a single template callback function can be attached to any given element at a time.
+
+### removeTemplateCallback()
+
+```javascript
+$(<selector for template DOM element>).removeTemplateCallback();
+```
+
+Detaches the template callback function from the selected elements so that it will no longer be called during template processing.
+
+
+## Template processing Environment
 
 With the exception of the `data-jst-include` instruction, the values of all *js-template* attributes will contain JavaScript expressions. These expressions will be evaluated in an environment that includes bindings from a variety of sources, and names defined by any of these sources can be referenced in *js-template* attribute expressions as if they were variables:
 
-* `JsEvalContext` data: All the properties of the `JsEvalContext`'s data object are included in the processing environment.
+* All the properties of the `JsEvalContext`'s data object are included in the processing environment.
 * Explicitly declared variables: The `setVariable(name,value)` method of `JsEvalContext` creates a new variable with the name `variableName` in the processing environment if no such variable exists, assigning it the value `variableValue`. If the variable already exists, it will be reassigned the value `variableValue`. Variables can also be created and assigned with the `data-jst-values` instruction (see below).
     * Note that variables defined in either of these ways are distinct from the `JsEvalContext` data object. Calling `setVariable` will not alter the data wrapped by the `JsEvalContext` instance. This fact can have important consequences when template processing is traversing the hierarchy of the data object (through the use of the `data-jst-select` instruction, for example -- see below): no matter what portion of the data hierarchy has been selected for processing, variables created with `setVariable` will always be available for use in template processing instructions.
-* Special variables: js-templte also defines three special variables that can be used in processing instruction attributes:
-* `this`: The keyword `this` in *js-template* attribute expressions will evaluate to the element on which the attribute is defined. In this respect *js-template* attributes mirror event handler attributes like `onclick`. 
-* `$index`: Array-valued data can result in a duplicate template node being created for each array element (see `data-jst-select`, below). In this case the processing environment for each of those nodes includes `$index` variable, which will contain the array index of the element associated with the node. 
-* `$this`: `$this` refers to the `JsEvalContext` data object used in processing the current node. So in the above example we could substitute `$this.end` for `end` without changing the meaning of the `data-jst-content` expression. This may not seem like a very useful thing to do in this case, but there are other cases in which `$this` is necessary. If the `JsEvalContext` contains a value such as a string or a number rather than an object with named properties, there is no way to retrieve the value using object-property notation, and so we need `$this` to access the value.
-So if you have the template
+* Special variables: *js-template* also defines three special variables that can be used in processing instruction attributes:
+  * `this`: The keyword `this` in *js-template* attribute expressions will evaluate to the element on which the attribute is defined. In this respect *js-template* attributes mirror event handler attributes like `onclick`. 
+  * `$index`: Array-valued data can result in a duplicate template node being created for each array element (see `data-jst-select`, below). In this case the processing environment for each of those nodes includes `$index` variable, which will contain the array index of the element associated with the node. 
+  * `$this`: `$this` refers to the context data object used in processing the current node. So in the above example we could substitute `$this.end` for `end` without changing the meaning of the `data-jst-content` expression. This may not seem like a very useful thing to do in this case, but there are other cases in which `$this` is necessary. If the data context contains a value such as a string or a number rather than an object with named properties, there is no way to retrieve the value using object-property notation, and so we need `$this` to access the value.
+
+So if you have the template:
 
 ```html
 <div id="witha">
@@ -240,9 +373,9 @@ $("#witha").refillTemplate(mydata,context);
 then the document will display the string `withaHeyNonnyNonnyHo`. The values of `id` and `parentNode.id` are available as properties of the current node (accessible through the keyword `this`), the value of `dataProperty` is available (via both a naked reference and the special variable `$this`) because it is defined in the context data object, and the value of `declaredVar` is available because it is defined in the context's variables.
 
 
-## Processing instructions
+## Template attributes
 
-In the discussion of specific instruction attributes below, the phrase "current node" refers to the DOM element on which the attribute is defined.
+In the discussion of specific template processing instruction attributes below, the phrase "current node" refers to the DOM element on which the attribute is defined.
 
 
 ### data-jst-content
@@ -269,6 +402,11 @@ will display
 in the browser. Note the use of `$this` here: the `refillTemplate()` function is passed the string "Joe User", and so this is the object to which `$this` refers.
 
 When the template processor executes a `data-jst-content` instruction, a new text node object is created with the string value of the result as its `nodeValue`, and this new text node becomes the only child of the current node. This implementation ensures that no markup in the result is evaluated.
+
+
+### data-jst-overwrite
+
+Default behavior for the `data-jst-content` attribute is to clear all text content from a node when the corresponding expression evaluations to `null` or `undefined`. By setting `data-jst-overwrite=false`, existing content will not be overwritten in such a case. Setting `data-jst-overwrite=true` is the same as omitting this attribute and relying on the default behavior.
 
 
 ### data-jst-select
@@ -339,7 +477,9 @@ First, whenever a `data-jst-select` produces duplicate nodes as a result of an a
 
 ### data-jst-if
 
-The value of the `data-jst-if` attribute is evaluated as a JavaScript expression. If the result is false, 0, "" or any other falsy JavaScript value that is true when negated, the CSS `display` property of the current template node will be set to 'none', rendering it invisible, and no further processing will be done on this node or its children. This instruction is particularly useful for checking for empty content. You might want to display an informative message if a user's address book is empty, for example, rather than just showing them an empty table. The following template will accomplish this goal:
+The value of the `data-jst-if` attribute is evaluated as a JavaScript expression. If the result a falsy value, the `jQuery.show(false)` method will be called, rendering it invisible, _and no further processing will be done on this node or its children_ (compare to `data-jst-show` and `data-jst-hide`, which hide or show the node but continue template processing). 
+
+This instruction is particularly useful for checking for empty content. You might want to display an informative message if a user's address book is empty, for example, rather than just showing them an empty table. The following template will accomplish this goal:
 
 ```html
 <div id="template">
@@ -360,16 +500,31 @@ If the addresses array is empty, the user will see "Address book is empty," but 
 
 
 ### data-jst-skip
-The value of the `data-jst-skip` attribute is evaluated as a JavaScript expression. If the result is any JavaScript value that evaluates to `true` in a boolean context, then the template processor will not process the subtree under the current node. This instruction is useful for improving the efficiency of an application (to avoid unnecessarily processing deep trees, for example).
+
+The value of the `data-jst-skip` attribute is evaluated as a JavaScript expression. If the result is a truthy JavaScript value, then the template processor will not process the subtree under the current node. This instruction is useful for improving the efficiency of an application (to avoid unnecessarily processing deep trees, for example).
 
 The effect of a `data-jst-skip` that evaluates to `true` is very similar to the result of a `data-jst-if` that evaluates to false. In both cases, no processing will be performed on the node's children. `data-jst-skip` will not, however, prevent the current node from being displayed.
 
 
+### data-jst-show
+
+The value of the `data-jst-show` attribute is evaluated as a JavaScript expression. If the result is a falsy JavaScript value, the `jQuery.show(false)` method will be called on the node, but processing of child nodes will contine normally. Compare to `data-jst-if`, which will prevent further template processing.
+
+
+### data-jst-hide
+
+The value of the `data-jst-show` attribute is evaluated as a JavaScript expression. If the result is a truthy JavaScript value, the `jQuery.show(false)` method will be called on the node, but processing of child nodes will contine normally. Compare to `data-jst-if`, which will prevent further template processing.
+
+
 ### data-jst-include
 
-As `data-jst-select` does, the `data-jst-include` instruction expands the structure of a template by copying a structure from some other element in the document. The value of the `data-jst-include` attribute is a CSS ID selector, for example `#someid`.
+As `data-jst-select` does, the `data-jst-include` instruction expands the structure of a template by copying a structure from some other element in the document. 
 
-If an element with the given id exists in the document, it is cloned and the clone replaces the node with the `data-jst-include` attribute. Template processing continues on the new element. If no element with the given ID exists, the node with the `data-jst-include` attribute is removed. No further processing instruction attributes will be evaluated on a node if it has a `data-jst-include` attribute.
+The value of the `data-jst-include` attribute can be one of two possibilities:
+* A CSS ID selector of the template to include, starting with "#"; for example, `data-jst-include="#someid"`.
+* A JavaScript expression that results in a string assumed to be the value of an HTML element ID (without the "#") of the template to include. For example, `data-jst-include="'(productType)+'Template'"`.
+
+If an element with the given ID exists in the document, it is cloned and the clone replaces the node with the `data-jst-include` attribute. Template processing continues on the new element. If no element with the given ID exists, the node with the `data-jst-include` attribute is removed. No further processing instruction attributes will be evaluated on a node if it has a `data-jst-include` attribute.
 
 The `data-jst-include` attribute allows for recursion, because a template can be included into itself. This feature can be handy when you want to display hierarchically structured data. If you have a hierarchically structured table of contents, for example, recursive `data-jst-include` statements allow you represent the arbitrarily complex hierarchy with a simple template:
 
@@ -489,12 +644,38 @@ function setClosed(data, value) {
 </div> 
 ```
 
-Note, the example above is for illustrative purposes only--the use of the `onclick` attribute on an element is highly discouraged in production code.
+(Note, the example above is for illustrative purposes only--the use of the `onclick` attribute on an element is highly discouraged in production code.)
 
 
 ### data-jst-vars
 
 This instruction is identical to `data-jst-values`, except that all assignment targets are interpreted as variable names, whether or not they start with a "$." That is, all assignment targets are interpreted as described in section 1 of the `data-jst-values` section above.
+
+
+### data-jst-data
+
+The value of this attribute is a pipe-separated (|) list of name/value pairs. Each value of each pair will be evaluated as a JavaScript expression, and the result will be set on the node using the `jQuery.data(name,value)` method. This allows easy interoperation between data derived in the template (such as a list index) with the page's script. For example:
+
+
+```html
+<div data-jst-select="favs" data-jst-data="foo='bar'|value=$this|index=$index">...</div>
+```
+
+will result in the following method calls: `jQuery(node).data("foo","bar")`, `jQuery(node).data("value",<value of the $this content variable>)` and `jQuery(node).data("index",<value of the current iterator index>)`
+
+
+### data-jst-id
+
+Allows template nodes to specify the `id` attribute they should have after processing. This attribute is useful when templates will be cloned from the existing DOM and so should not have an ID that is already present in the original template. This attribute should always be used instead of the `id` attribute for descendent nodes of the top-level template container. (The top-level template container should have an `id` attribute so that it can be found and processed; this attribute is always removed when the template is cloned via `fillTemplate()`.)
+
+Note that `data-jst-values` can also be used to set the element's `id` attribute, but this attribute helps simplify the use of `data-jst-values` for this common use case.
+
+
+### data-jst-idexpr
+
+Similar to `data-jst-id`, but eval's the attribute value as an expression. This attribute can be used to dynamically generate ID values based on context data, `$index` iteration value, etc.
+
+Note that `data-jst-values` can also be used to set the element's `id` attribute, but this attribute helps simplify the use of `data-jst-values` for this common use case.
 
 
 ### data-jst-eval
@@ -526,56 +707,6 @@ and then a separate template displays these counts later in the page:
 Note that when you close headings the counts change: `data-jst-if` is not only hiding the closed elements, but also aborting the processing of these elements, so that the `data-jst-eval` expressions on these elements are never evaluated.
 
 
-### data-jst-id
-
-Allows template nodes to specify the `id` attribute they should have after processing. This attribute is useful when templates will be cloned from the existing DOM and so should not have an ID that is already present in the original template. This attribute should always be used instead of the `id` attribute for descendent nodes of the top-level template container. (The top-level template container should have an `id` attribute so that it can be found and processed; this attribute is always removed when the template is cloned via `fillTemplate()`.)
-
-Note that `data-jst-values` can also be used to set the element's `id` attribute, but this attribute helps simplify the use of `data-jst-values` for this common use case.
-
-
-### data-jst-idexpr
-
-Similar to `data-jst-id`, but eval's the attribute value as an expression. This attribute can be used to dynamically generate ID values based on context data, `$index` iteration value, etc.
-
-Note that `data-jst-values` can also be used to set the element's `id` attribute, but this attribute helps simplify the use of `data-jst-values` for this common use case.
-
-
-### data-jst-overwrite
-
-
-### data-jst-data
-
-
-## jQuery integration
-
-### refillTemplate()
-
-```javascript
-$(<selector for template DOM element(s)>).refillTemplate(data, [parentData]);
-```
-
-Merges (and re-merges) template data with the selected template DOM node. The template DOM node will not be cloned; this merging occurs in-place. Data can be merged repeatedly and *js-template* will find the differences and modify the DOM tree accordingly. It is preferable to use this technique, including in-place templates, because it allows for fast, real-time updates without cloning or destroying large segments of the DOM.
-
-The `data` parameter is a normal JavaScript object whose properties will be used to fill the template with data.
-
-The `parentData` parameter is shared data that may be used as a secondary lookup.
-
-The return value is the processed template's DOM element. This element already exists in the DOM and any changes as a result of merging the data have already been rendered by the browser.
-
-### fillTemplate()
-
-```javascript
-$(<selector for template DOM element>).fillTemplate(data, [parentData]);
-```
-
-Clones the template and merges the data. The return value of the method (the cloned DOM element) must be attached somewhere in the DOM to make the processed template visible.  This method should be used when the template is stored in a separate DOM node that will be cloned and attached elsewhere in the DOM as needed. In general, it's preferable to use `refillTemplate()` when possible because it allows data to be merged repeatedly to the same DOM elements.
-
-The `data` parameter is a normal JavaScript object whose properties will be used to fill the template with data.
-
-The `parentData` parameter is shared data that may be used as a secondary lookup.
-
-The return value is the processed and cloned template's DOM element. It must be attached to the DOM in order to be visible.
-
 
 ## Order of evaluation
 
@@ -583,15 +714,20 @@ The return value is the processed and cloned template's DOM element. It must be 
 
 * `data-jst-include`. If a `data-jst-include` attribute is present no further attributes are processed. 
 * `data-jst-select`. If `data-jst-select` is array-valued, remaining attributes will be copied to each new duplicate element created by the `data-jst-select` and processed when the new elements are processed. 
-* `data-jst-if` 
+* `data-jst-id` 
+* `data-jst-idexpr` 
+* `data-jst-if`. If the value of a `data-jst-if` attribute is falsy, template processing stops immediately and no further attributes will be evaluated. 
 * `data-jst-vars` 
 * `data-jst-values` 
+* `data-jst-data` 
 * `data-jst-eval` 
+* `data-jst-show` 
+* `data-jst-hide` 
 * `data-jst-skip` 
 * `data-jst-content`
 
 
-# Changes from the original JsTemplate project
+# Appendix: Changes from the original JsTemplate project
 
 ## Namespacing
 
