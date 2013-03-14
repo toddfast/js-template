@@ -5,12 +5,19 @@ js-template
 
 *js-template* has unique features and expressive power not found in other JavaScript templating frameworks:
 
-* Templates stay in HTML where they belong! 
-* No funky syntax to learn—templates are valid HTML5.
+* Templates stay in HTML where they belong! No funky syntax to learn—templates are valid HTML5.
 * Both pre- and post-processed templates will validate.
 * Fully jQuery-ized.
-* Easy iteration over arrays, conditional display of template elements, dynamically skip sub-branches, modify attribute values, set contextual variables, attach template processing callbacks, "transclude" child templates, and much more
-* Processed templates are themselves templates and can be efficiently and repeatedly refilled
+* Killer capabilities:
+  * Reprocess templates again and again
+  * Use JavaScript expressions to derive new values
+  * Iterate easily over arrays
+  * Conditionally display or skip elements
+  * Modify DOM attributes
+  * Use contextual variables during processing
+  * Attach function callbacks
+  * "transclude" child templates
+  * and much more.
 * Easy to integrate with other frameworks like Backbone.js
 * Supported in practically all browsers (even back to IE6 & FF3), including mobile browsers
 * Unmatched power weighing in at only ~10.5KB minified and ~3.5KB gzipped
@@ -784,7 +791,7 @@ Note that when you close headings the counts change: `data-jst-if` is not only h
 * `data-jst-skip` 
 * `data-jst-content`
 
- 
+
 # Appendix: Examples
 
 ## Simple in-place template
