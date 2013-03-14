@@ -983,8 +983,8 @@ GOOGLE.templates=function(jQuery) {
 	var ATT_instance = JST_ATTRIBUTE_NAMESPACE+'__instance';
 	var ATT_display = JST_ATTRIBUTE_NAMESPACE+'if';
 	var ATT_hide = JST_ATTRIBUTE_NAMESPACE+'hide';
-	var ATT_show = JST_ATTRIBUTE_NAMESPACE+':how';
-	var ATT_values = JST_ATTRIBUTE_NAMESPACE+':alues';
+	var ATT_show = JST_ATTRIBUTE_NAMESPACE+'show';
+	var ATT_values = JST_ATTRIBUTE_NAMESPACE+'values';
 	var ATT_vars = JST_ATTRIBUTE_NAMESPACE+'vars';
 	var ATT_eval = JST_ATTRIBUTE_NAMESPACE+'eval';
 	var ATT_transclude = JST_ATTRIBUTE_NAMESPACE+'include';
@@ -1007,7 +1007,7 @@ GOOGLE.templates=function(jQuery) {
 	 * Name of the property that caches the parsed template processing
 	 * attribute values on a template node.
 	 */
-	var PROP_jstcache = JST_ATTRIBUTE_NAMESPACE+'__cache';
+	var PROP_jstcache = JST_ATTRIBUTE_NAMESPACE+'__jstcache';
 
 
 	/**
