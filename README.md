@@ -44,7 +44,9 @@ Hello, dude!
 
 Credit for the power behind *js-template* goes to Steffen Meschkat and the original JsTemplate committers at Google. My work has been mainly to modernize the core template engine API, integrate it with jQuery, fix some bugs, and sprinkle some additional features in to make it useful in everyday production work.
 
-  # Getting started
+
+
+# Getting started
 
 To use *js-template* in your page, you will need to do five things:
 
@@ -72,7 +74,9 @@ Include the latest version of jQuery 1.x before loading *js-template*. For examp
 
 ## 3. Define your data in JavaScript
 
-A template can be used to display any JavaScript object, or graph of JavaScript objects. The template attributes determine how the object is mapped to an HTML representation. For a real application, the data may initially come from the server, either as JSON data or in some other format that will need to be translated into a JavaScript object representation. For the sake of simplicity, the examples in this document will initialize the data for template processing on the client-side by setting a variable. 
+A template can be used to display any JavaScript object, or graph of JavaScript objects. The template attributes determine how the object is mapped to an HTML representation.
+
+For a real application, the data may initially come from the server, either as JSON data or in some other format that will need to be translated into a JavaScript object representation. For the sake of simplicity, the examples in this document will initialize the data for template processing on the client-side by setting a variable. 
 
 Here is some sample data for the examples below:
 
@@ -119,20 +123,17 @@ That's it! Here's how it works:
 The result of template processing is also a valid HTML template that preserves the attributes of the input template. Here is the result of processing the above template with our sample data:
   
 ```
-<div data-jst-__cache="0" id="template1">
-  <h1 data-jst-__cache="1" data-jst-content="title">Favorite Things</h1>
-  <ul data-jst-__cache="0">
-    <li data-jst-__instance="0" data-jst-__cache="2" data-jst-select="favs" 
-        data-jst-content="$this">raindrops</li>
-    <li data-jst-__instance="1" data-jst-__cache="3" data-jst-select="favs" 
-        data-jst-content="$this">whiskers</li>
-    <li data-jst-__instance="2" data-jst-__cache="4" data-jst-select="favs" 
-        data-jst-content="$this">mittens</li>
+<div id="template1">
+  <h1 data-jst-content="title">Favorite Things</h1>
+  <ul>
+    <li data-jst-select="favs" data-jst-content="$this">raindrops</li>
+    <li data-jst-select="favs" data-jst-content="$this">whiskers</li>
+    <li data-jst-select="favs" data-jst-content="$this">mittens</li>
   </ul>
 </div>
 ```
 
-(Notice some new attributes, like `data-jst-__cache` and `data-jst-__instance`, which were added by the template processor to track reprocessing of the template. You can ignore these implementation-specific details. They are included here so that you're not surprised the first time you look at your processed template output.)
+(If you run this example in the browser, you'll see some additional attributes, like `data-jst-__cache` and `data-jst-__instance`, which were added by the template processor to track reprocessing of the template. These low-level implementation details have been elided here, and you can ignore them.)
 
 **All this is to say that the output of template processing is just another template!** This capability allows *js-template* to reprocess the same template multiple times, and it's smart enough to efficiently handle complicated changes to the data like inserts and deletes.
 
@@ -150,25 +151,36 @@ $("button.my-button").click(function onMyButtonClick(event) {
 });
 ```
 
-Now the template becomes (eliding the various `data-jst-__*` attributes):
+Now the template becomes:
 
 ```html
-  <div id="template1">
-    <h1 data-jst-content="title">Favorite Things</h1>
-    <ul>
-      <li data-jst-select="favs" data-jst-content="$this">raindrops</li>
-      <li data-jst-select="favs" data-jst-content="$this">whiskers</li>
-      <li data-jst-select="favs" data-jst-content="$this">mittens</li>
-      <li data-jst-select="favs" data-jst-content="$this">packages</li>
-    </ul>
-  </div>
+<div id="template1">
+  <h1 data-jst-content="title">Favorite Things</h1>
+  <ul>
+    <li data-jst-select="favs" data-jst-content="$this">raindrops</li>
+    <li data-jst-select="favs" data-jst-content="$this">whiskers</li>
+    <li data-jst-select="favs" data-jst-content="$this">mittens</li>
+    <li data-jst-select="favs" data-jst-content="$this">packages</li>
+  </ul>
+</div>
 ```
 
 ## More advanced templating
 
-Template HTML can appear anywhere in your document where you want to display your data, and it can even contain placeholder values that will be overwritten during template processing. This is very useful for mocking up static pages with placeholder data that will get templatized and filled later.
+#### Placeholder values
 
-A template can visibly appear in-place, anywyere in the page, before it is processed, but it doesn't have to. If you will be reusing the same template in multiple places in a document, you can include a single hidden copy of the template and then use JavaScript to make new copies of its DOM node and place them in multiple locations. This way, templates become reusable components.
+Template HTML can appear anywhere in your document where you want to display your data, and it can even contain placeholder values that will be overwritten during template processing. This is very useful for mocking up static pages with placeholder data that will get templatized and filled later:
+
+```html
+<div id="template">
+  <!-- "Loading data..." will be replaced with the value of someData -->
+  <p data-jst-content="someData">Loading data...</p>
+</div>
+```
+
+#### In-place vs. cloned templates
+
+A template can visibly appear in-place, anywhere in the page, before it is processed, but it doesn't have to. If you will be reusing the same template in multiple places in a document, you can include a single hidden copy of the template and then use JavaScript to make new copies of its DOM node and place them in multiple locations. This way, templates become reusable components.
 
 In this case, we use the `fillTemplate()` function instead of `refillTemplate()`. The return value of `fillTemplate()` is the root element of the cloned and filled template that must be attached to the DOM to be visible:
 
@@ -615,7 +627,7 @@ var data = {
   }]
 };
 ```
-```javascript
+```html
 <div id="template">
   <span data-jst-content="title">Outline heading</span>
   <ul data-jst-if="items.length">
@@ -772,41 +784,8 @@ Note that when you close headings the counts change: `data-jst-if` is not only h
 * `data-jst-skip` 
 * `data-jst-content`
 
-
-# Appendix: Changes from the original JsTemplate project
-
-## Namespacing
-
-I've put all the original JsTemplate code into the `GOOGLE.templates` namespace to avoid global namespace pollution.
-
-## Added new public methods
-
-I've added several public methods to the `GOOGLE.templates` namespace to make using the raw JsTemplate engine easier. However, these methods should not normally be used by the application in favor of using jQuery integration instead. If interested, you can see these methods in the source.
-
-### jQuery integration
-
-I've integrated the original engine into a properly namespaced jQuery plugin called `jquery-js-template`, with a much simplified interface. It is now possible to use the standard jQuery `$(...)` selector syntax to find and process templates.
-
-
-### JsTemplate Attributes
-
-I found the original JsTemplate API difficult to use and remember, so I've renamed key attributes and methods to make them more meaningful and stylistically consistent.
-
-First, all template-specific HTML attributes (like `jscontent` and `jsselect`) have been namespaced. JsTemplate will now not discover template attributes without a proper namespace declaration. The default namespace (without a namespace declaration in the HTML document) is `jst`. Although using an alternative namespace is theoretically possible, it seems to be infeasible to discover what namespace is being used in Internet Explorer 8 or below, so for now, use the standard namespace of `jst`.
-
-To declare the *js-template* namespace, attach the following attribute to the `<html>` or `<body>` element of the document:
-
-```html
-<html xmlns:jst="http://code.google.com/p/google-jstemplate/">
-```
-
-The usage of these attributes then looks like the following:
-
-```html
-<div data-jst-select="someArray"><span data-jst-content="foo">Future value of foo</span></div>
-```
-
-# Examples
+ 
+# Appendix: Examples
 
 ## Simple in-place template
 
@@ -845,3 +824,23 @@ The usage of these attributes then looks like the following:
   </body>
 </html>
 ```
+
+
+# Appendix: Changes from the original JsTemplate project
+
+## Namespacing
+
+I've put all the original JsTemplate code into the `GOOGLE.templates` namespace to avoid global namespace pollution.
+
+## Added new public methods
+
+I've added several public methods to the `GOOGLE.templates` namespace to make using the raw JsTemplate engine easier. However, these methods should not normally be used by the application in favor of using jQuery integration instead. If interested, you can see these methods in the source.
+
+### jQuery integration
+
+I've integrated the original engine into a properly namespaced jQuery plugin called `jquery-js-template`, with a much simplified interface. It is now possible to use the standard jQuery `$(...)` selector syntax to find and process templates.
+
+
+### JsTemplate attributes
+
+I found the original JsTemplate API difficult to use and remember, so I've renamed key attributes and methods to make them more meaningful and stylistically consistent. All template-specific HTML attributes (like `jscontent` and `jsselect`) have been renamed to be HTML5-compatible.
