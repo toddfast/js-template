@@ -22,16 +22,27 @@ js-template
 * Supported in practically all browsers (even back to IE6 & FF3), including mobile browsers
 * Unmatched power weighing in at only ~10.5KB minified and ~3.5KB gzipped
 
-Here is a simple *js-template* template:
+Here is a simple *js-template* template in an HTML page:
 
 ```html
-<p id="myTemplate">Hello, <span data-jst-content="who"></span>!</p>
+<html>
+    <body>
+        <p id="myTemplate">Hello, <span data-jst-content="who">nobody</span>!</p>
+    </body>
+</html>
 ```
 
-To fill the template with data, you can do this:
+Just loading the page, it looks like this:
+
+```html
+Hello, nobody!
+```
+
+Now you're ready to fill the template with data, like this:
 
 ```javascript
-$("#myTemplate").refillTemplate({ who: "World" });
+var data = { who: "World" };
+$("#myTemplate").refillTemplate(data);
 ```
 
 which results in:
@@ -40,10 +51,11 @@ which results in:
 Hello, World!
 ```
 
-And filled templates remain valid templates. You can just refill them again with different data:
+And filled templates remain valid templates. You can just refill them again when the data changes:
 
 ```javascript
-$("#myTemplate").refillTemplate({ who: "dude" });
+data.who = "dude";
+$("#myTemplate").refillTemplate(data);
 ```
 
 which results in:
@@ -51,6 +63,7 @@ which results in:
 ```html
 Hello, dude!
 ```
+
 
 #### Credit where credit is due
 
