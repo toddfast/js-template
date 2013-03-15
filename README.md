@@ -62,13 +62,6 @@ which results in:
 
 ```html
 Hello, dude!
-```
-
-
-#### Credit where credit is due
-
-Credit for the power behind *js-template* goes to Steffen Meschkat and the original JsTemplate committers at Google. My work has been mainly to modernize the core template engine API, integrate it with jQuery, fix some bugs, and sprinkle some additional features in to make it useful in everyday production work.
-
 
 
 # Getting started
@@ -251,6 +244,7 @@ $("container")
 
 Of course, you don't have to refill a template with the same object it was originally filled with. You can make a copy of the data or use new data (say from an AJAX call) and refill just like above. The template will intelligently figure out the diffs in the data and display it properly.
 
+```
 
 # Reference
 
@@ -271,7 +265,7 @@ The processing instructions that define the results of template processing are e
 * `data-jst-hide`
 * `data-jst-include`
 * `data-jst-values`
-* `data-jst-vars`,
+* `data-jst-vars`
 * `data-jst-eval`
 * `data-jst-id`
 * `data-jst-idexpr`
@@ -853,6 +847,8 @@ Note that when you close headings the counts change: `data-jst-if` is not only h
 
 
 # Appendix: Changes from the original JsTemplate project
+
+Credit for the power behind *js-template* goes to Steffen Meschkat and the original JsTemplate committers at Google. My work has been mainly to modernize the core template engine API, integrate it with jQuery, fix some bugs, and sprinkle some additional features in to make it useful in everyday production work.
 
 ## Namespacing
 
