@@ -1,7 +1,7 @@
 js-template
 ===========
 
-*js-template* is a powerful browser-side templating framework for jQuery + HTML5. This project is an updated and modernized reincarnation of Google's excellent open-source [JsTemplate project](http://code.google.com/p/google-jstemplate/).
+*js-template* is a powerful browser-side templating framework for jQuery + HTML5. It is an updated and modernized reincarnation of Google's excellent open-source [JsTemplate project](http://code.google.com/p/google-jstemplate/).
 
 *js-template* has unique features and expressive power not found in other JavaScript templating frameworks:
 
@@ -22,27 +22,32 @@ js-template
 * Supported in practically all browsers (even back to IE6 & FF3), including mobile browsers
 * Unmatched power weighing in at only ~10.5KB minified and ~3.5KB gzipped
 
-Here is a trivial example of using *js-template*:
+Here is a simple *js-template* template:
 
 ```html
 <p id="myTemplate">Hello, <span data-jst-content="who"></span>!</p>
-
-<script>
-$("#myTemplate").refillTemplate({ who: "World" });
-</script>
 ```
+
+To fill the template with data, you can do this:
+
+```javascript
+$("#myTemplate").refillTemplate({ who: "World" });
+```
+
 which results in:
+
 ```html
 Hello, World!
 ```
 
 And filled templates remain valid templates. You can just refill them again with different data:
-```html
-<script>
+
+```javascript
 $("#myTemplate").refillTemplate({ who: "dude" });
-</script>
 ```
+
 which results in:
+
 ```html
 Hello, dude!
 ```
