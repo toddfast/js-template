@@ -36,17 +36,15 @@
  * data, see comment in jstSelect_().
  */
 
-// Create a fake define function to bootstrap our module in case 
-// define() is not already present
-define = define || function fakeDefine(moduleName, dependencies, factory) {
+// Create a fake define() function to bootstrap our AMD module in 
+// case define() is not already present 
+window.__define = window.define || function fakeDefine(moduleName, dependencies, factory) {
 	window.GOOGLE = window.GOOGLE || {};
 	window.GOOGLE.templates=factory.call(factory,jQuery);
 }
 
-define(
-	"js-template",
-	["jquery"],
-	function(jQuery) {
+// Define an AMD module
+__define("js-template",["jquery"],function(jQuery) {
 
 	var log = function(msg) {
 		if (window.console) {
@@ -2298,5 +2296,4 @@ define(
 	};
 
 	return exports;
-
 });
