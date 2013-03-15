@@ -63,6 +63,7 @@ which results in:
 Hello, dude!
 ```
 
+--------------------
 
 # Getting started
 
@@ -244,6 +245,7 @@ $("container")
 
 Of course, you don't have to refill a template with the same object it was originally filled with. You can make a copy of the data or use new data (say from an AJAX call) and refill just like above. The template will intelligently figure out the diffs in the data and display it properly.
 
+--------------------
 
 # Reference
 
@@ -803,6 +805,7 @@ Note that when you close headings the counts change: `data-jst-if` is not only h
 * `data-jst-skip` 
 * `data-jst-content`
 
+--------------------
 
 # Appendix: Examples
 
@@ -844,6 +847,7 @@ Note that when you close headings the counts change: `data-jst-if` is not only h
 </html>
 ```
 
+--------------------
 
 # Appendix: Changes from the original JsTemplate project
 
