@@ -18,7 +18,6 @@ js-template
   * Attach function callbacks
   * "transclude" child templates
   * and much more.
-* Easy to integrate with other frameworks like Backbone.js
 * Supported in practically all browsers (even back to IE6 & FF3), including mobile browsers
 * Unmatched power weighing in at only ~10.5KB minified and ~3.5KB gzipped
 
