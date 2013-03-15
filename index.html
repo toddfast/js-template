@@ -56,13 +56,24 @@
 <li>Easy to integrate with other frameworks like Backbone.js</li>
 <li>Supported in practically all browsers (even back to IE6 &amp; FF3), including mobile browsers</li>
 <li>Unmatched power weighing in at only ~10.5KB minified and ~3.5KB gzipped</li>
-</ul><p>Here is a trivial example of using <em>js-template</em>:</p>
+</ul><p>Here is a simple <em>js-template</em> template in an HTML page:</p>
 
-<div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">"myTemplate"</span><span class="nt">&gt;</span>Hello, <span class="nt">&lt;span</span> <span class="na">data-jst-content=</span><span class="s">"who"</span><span class="nt">&gt;&lt;/span&gt;</span>!<span class="nt">&lt;/p&gt;</span>
+<div class="highlight"><pre><span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">"myTemplate"</span><span class="nt">&gt;</span>Hello, <span class="nt">&lt;span</span> <span class="na">data-jst-content=</span><span class="s">"who"</span><span class="nt">&gt;</span>nobody<span class="nt">&lt;/span&gt;</span>!<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
 
-<span class="nt">&lt;script&gt;</span>
-<span class="nx">$</span><span class="p">(</span><span class="s2">"#myTemplate"</span><span class="p">).</span><span class="nx">refillTemplate</span><span class="p">({</span> <span class="nx">who</span><span class="o">:</span> <span class="s2">"World"</span> <span class="p">});</span>
-<span class="nt">&lt;/script&gt;</span>
+<p>Just loading the page, it looks like this:</p>
+
+<div class="highlight"><pre>Hello, nobody!
+</pre></div>
+
+<p>Now you're ready to fill the template with data, like this:</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">who</span><span class="o">:</span> <span class="s2">"World"</span> <span class="p">};</span>
+<span class="nx">$</span><span class="p">(</span><span class="s2">"#myTemplate"</span><span class="p">).</span><span class="nx">refillTemplate</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
 </pre></div>
 
 <p>which results in:</p>
@@ -70,11 +81,10 @@
 <div class="highlight"><pre>Hello, World!
 </pre></div>
 
-<p>And filled templates remain valid templates. You can just refill them again with different data:</p>
+<p>And filled templates remain valid templates. You can just refill them again when the data changes:</p>
 
-<div class="highlight"><pre><span class="nt">&lt;script&gt;</span>
-<span class="nx">$</span><span class="p">(</span><span class="s2">"#myTemplate"</span><span class="p">).</span><span class="nx">refillTemplate</span><span class="p">({</span> <span class="nx">who</span><span class="o">:</span> <span class="s2">"dude"</span> <span class="p">});</span>
-<span class="nt">&lt;/script&gt;</span>
+<div class="highlight"><pre><span class="nx">data</span><span class="p">.</span><span class="nx">who</span> <span class="o">=</span> <span class="s2">"dude"</span><span class="p">;</span>
+<span class="nx">$</span><span class="p">(</span><span class="s2">"#myTemplate"</span><span class="p">).</span><span class="nx">refillTemplate</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
 </pre></div>
 
 <p>which results in:</p>
@@ -82,7 +92,9 @@
 <div class="highlight"><pre>Hello, dude!
 </pre></div>
 
-<p>There's far, far more template-y goodness than this waiting for you! <a href="https://github.com/toddfast/js-template">Go check out the full <em>js-template</em> documentation on GitHub.</a></p>
+<p>There's far, far more template-y goodness than this waiting for you! </p>
+
+<p><a href="https://github.com/toddfast/js-template">Go check out the full <em>js-template</em> documentation on GitHub.</a></p>
       </section>
     </div>
 
