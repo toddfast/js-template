@@ -62,6 +62,7 @@ which results in:
 
 ```html
 Hello, dude!
+```
 
 
 # Getting started
