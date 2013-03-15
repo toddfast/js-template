@@ -8,6 +8,7 @@ js-template
 * Templates stay in HTML where they belong! No funky syntax to learn—templates are valid HTML5.
 * Both pre- and post-processed templates will validate.
 * Fully jQuery-ized.
+* AMD-enabled.
 * Killer capabilities:
   * Reprocess templates again and again as data changes
   * Use JavaScript expressions to derive displayable content
