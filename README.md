@@ -244,7 +244,6 @@ $("container")
 
 Of course, you don't have to refill a template with the same object it was originally filled with. You can make a copy of the data or use new data (say from an AJAX call) and refill just like above. The template will intelligently figure out the diffs in the data and display it properly.
 
-```
 
 # Reference
 
