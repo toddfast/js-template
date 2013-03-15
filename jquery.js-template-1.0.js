@@ -36,17 +36,9 @@
  * data, see comment in jstSelect_().
  */
 
-// Create a fake define function to bootstrap our module in case 
-// define() is not already present
-define = define || function fakeDefine(moduleName, dependencies, factory) {
-	window.GOOGLE = window.GOOGLE || {};
-	window.GOOGLE.templates=factory.call(factory,jQuery);
-}
 
-define(
-	"js-template",
-	["jquery"],
-	function(jQuery) {
+var GOOGLE = GOOGLE || {};
+GOOGLE.templates=(function(jQuery) {
 
 	var log = function(msg) {
 		if (window.console) {
@@ -2299,4 +2291,4 @@ define(
 
 	return exports;
 
-});
+})(jQuery);
