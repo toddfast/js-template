@@ -167,3 +167,4 @@ pip-log.txt
 /platform/web-api/target/
 /platform/gunpowder/target/
 /platform/phantomjs/target/
+/examples/target/
