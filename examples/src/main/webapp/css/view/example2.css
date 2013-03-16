@@ -1,0 +1,49 @@
+#example2 .items-list > ul {
+	list-style-type: none;
+	margin: 0;
+}
+
+#example2 .items-list li {
+	list-style: none;
+}
+
+#example2 .item {
+	margin: 10px 0;
+	border-radius: 8px;
+	padding: 5px 10px;
+	background-color: #eee;
+	color: #fff;
+	cursor: pointer;
+}
+
+#example2 .item h3 {
+	margin: 0;
+}
+
+#example2 .item.red {
+	background-color: red;
+}
+
+#example2 .item.orange {
+	background-color: orange;
+}
+
+#example2 .item.yellow {
+	background-color: gold;
+}
+
+#example2 .item.green {
+	background-color: green;
+}
+
+#example2 .item.blue {
+	background-color: darkBlue;
+}
+
+#example2 .item.indigo {
+	background-color: indigo;
+}
+
+#example2 .item.violet {
+	background-color: violet;
+}

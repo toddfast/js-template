@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="css/view/example2.css" rel="stylesheet" media="screen">
+	</head>
+	<body id="example2">
+		<div class="container">
+
+			<div class="items-list available span5">
+				<h1>Available colors</h1>
+				<div data-jst-include="#itemListTemplate"></div>
+			</div>
+
+			<div class="items-list selected span5">
+				<h1>Selected colors</h1>
+				<div data-jst-include="#itemListTemplate"></div>
+			</div>
+
+		</div>
+
+
+		<div id="templates" style="display: none;">
+
+			<div id="itemTemplate" class="item" data-jst-data="item=$this">
+				<h3 data-jst-content="name"></h3>
+				<p data-jst-content="description"></p>
+			</div>
+
+			<ul id="itemListTemplate">
+				<li data-jst-select="items">
+					<div data-jst-include="#itemTemplate"></div>
+				</li>
+			</ul>
+
+		</div>
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>
+		<script src="bootstrap/js/bootstrap.min.js"></script>
+		<script src="js/lib/js-template/js-template.js"></script>
+		<script src="js/view/example2.js"></script>
+	</body>
+</html>
