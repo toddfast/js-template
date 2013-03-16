@@ -5,9 +5,11 @@ js-template
 
 *js-template* has unique features and expressive power not found in other JavaScript templating frameworks:
 
+* Highly focused feature-set that doesn't take over your app.
 * Templates stay in HTML where they belong! No funky syntax to learn—templates are valid HTML5.
 * Both pre- and post-processed templates will validate.
 * Fully jQuery-ized.
+* AMD-enabled.
 * Killer capabilities:
   * Reprocess templates again and again as data changes
   * Use JavaScript expressions to derive displayable content
@@ -18,7 +20,7 @@ js-template
   * Attach function callbacks
   * "transclude" child templates
   * and much more.
-* Supported in practically all browsers (even back to IE6 & FF3), including mobile browsers
+* Supported in practically all browsers (includng IE6+ & FF3+), including mobile browsers
 * Unmatched power weighing in at only ~10.5KB minified and ~3.5KB gzipped
 
 Here is a simple *js-template* template in an HTML page:
