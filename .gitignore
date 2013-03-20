@@ -161,10 +161,5 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
-/platform/benchtest/target/
-/platform/api/target/
-/platform/server-api/target/
-/platform/web-api/target/
-/platform/gunpowder/target/
-/platform/phantomjs/target/
-/examples/target/
+
+target
