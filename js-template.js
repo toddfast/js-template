@@ -122,8 +122,9 @@ __define("js-template",["jquery"],function(jQuery) {
 			// e.g. eval("(function() {})") returns undefined, and not a function
 			// object, in IE.
 			return eval('[' + expr + '][0]');
-		} catch (e) {
-			console.log("Exception during eval of expression",expr,':',e);
+		}
+		catch (e) {
+			console.error("Exception during eval of expression:\n",expr,'\n',e);
 			return null;
 		}
 	}
@@ -340,7 +341,8 @@ __define("js-template",["jquery"],function(jQuery) {
 			}
 			else {
 				// Otherwise this is some other weird error
-				console.log("Exception getting attribute",name,node.nodeName,":",e.message);
+				console.error("Exception getting attribute",name,
+					"from node",node.nodeName,":\n",e.message);
 				throw e;
 			}
 		}
@@ -776,12 +778,16 @@ __define("js-template",["jquery"],function(jQuery) {
 				try {
 					functionDeclaration=functionDeclaration.split("{")[0];					
 				}
-				catch (e) {
+				catch (ex) {
 					// Ignore
 				}
 
-				console.log("Exception processing template (",functionDeclaration,"):\n",
-					e.message,"\nat",template);
+				console.error("Exception processing template at element ",
+					template,
+					":\n",
+					e.message,
+					"\nin ",
+					functionDeclaration);
 			}
 			return JsEvalContext.globals_[GLOB_default];
 		}
@@ -890,7 +896,7 @@ __define("js-template",["jquery"],function(jQuery) {
 				JsEvalContext.evalToFunctionCache_[expr] =
 					new Function(STRING_a, STRING_b, STRING_with + expr);
 			} catch (e) {
-				console.log("Could not eval to expression",expr,":",e);
+				console.error("Could not eval to expression\n",expr,"\n",e.message);
 			}
 		}
 		return JsEvalContext.evalToFunctionCache_[expr];
@@ -1555,10 +1561,20 @@ __define("js-template",["jquery"],function(jQuery) {
 					context.jsexec(fn,template);
 				}
 				catch (e) {
-					// console.log("jstProcessInner_: exception in "+JSTFN_DATA+
-					// 	" function on element "+element+": "+fn);
-					console.log("Exception in ",fn,
-						" function on element ",element,": ",e.message);
+					var functionDeclaration=fn.toString();
+					try {
+						functionDeclaration=functionDeclaration.split("{")[0];					
+					}
+					catch (ex) {
+						// Ignore
+					}
+
+					console.error("Exception in template callback at element ",
+						template,
+						":\n",
+						e.message,
+						"\nin ",
+						functionDeclaration);
 				}
 			});
 		}
@@ -2060,7 +2076,7 @@ __define("js-template",["jquery"],function(jQuery) {
 		jstLoadTemplate_(doc, loadHtmlFn(), opt_target || STRING_jsts);
 		var section = domGetElementById(doc, name);
 		if (!section) {
-			console.log("No id",name,"available from function ",loadHtmlFn);
+			console.warning("No id",name,"available from function ",loadHtmlFn);
 		}
 		return /** @type Element */(section);
 	}
