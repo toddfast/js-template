@@ -46,10 +46,31 @@ window.__define = window.define || function fakeDefine(moduleName, dependencies,
 // Define an AMD module
 __define("js-template",["jquery"],function(jQuery) {
 
-	var log = function(msg) {
-		if (window.console) {
-			window.console.log(msg);
+	// Stub window.console.* methods
+	(function() {
+		var method;
+		var noop = function () {};
+		var methods = [
+			'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
+			'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
+			'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
+			'timeStamp', 'trace', 'warn'];
+		var length = methods.length;
+		var console = (window.console = window.console || {});
+
+		while (length--) {
+			method = methods[length];
+
+			// Only stub undefined methods.
+			if (!console[method]) {
+				console[method] = noop;
+			}
 		}
+	}());
+
+
+	var log = function(msg, msgN) {
+		window.console.log.apply(arguments);
 	}
 
 	// TAF
@@ -102,7 +123,7 @@ __define("js-template",["jquery"],function(jQuery) {
 			// object, in IE.
 			return eval('[' + expr + '][0]');
 		} catch (e) {
-			log('EVAL FAILED ' + expr + ': ' + e);
+			console.log("Exception during eval of expression",expr,':',e);
 			return null;
 		}
 	}
@@ -319,7 +340,7 @@ __define("js-template",["jquery"],function(jQuery) {
 			}
 			else {
 				// Otherwise this is some other weird error
-				log(e.message+"\n\n'"+name+"'"+"\n\n'"+node.nodeName+"'");
+				console.log("Exception getting attribute",name,node.nodeName,":",e.message);
 				throw e;
 			}
 		}
@@ -748,10 +769,19 @@ __define("js-template",["jquery"],function(jQuery) {
 	JsEvalContext.prototype.jsexec = function(exprFunction, template) {
 		try {
 			return exprFunction.call(template, this.vars_, this.data_);
-		} catch (e) {
+		}
+		catch (e) {
 			if (!(e instanceof ReferenceError)) { // TAF: quiet for missing props
-				log('jsexec EXCEPTION: ' + e + ' at ' + template +
-					' with ' + exprFunction);
+				var functionDeclaration=exprFunction.toString();
+				try {
+					functionDeclaration=functionDeclaration.split("{")[0];					
+				}
+				catch (e) {
+					// Ignore
+				}
+
+				console.log("Exception processing template (",functionDeclaration,"):\n",
+					e.message,"\nat",template);
 			}
 			return JsEvalContext.globals_[GLOB_default];
 		}
@@ -860,7 +890,7 @@ __define("js-template",["jquery"],function(jQuery) {
 				JsEvalContext.evalToFunctionCache_[expr] =
 					new Function(STRING_a, STRING_b, STRING_with + expr);
 			} catch (e) {
-				log('jsEvalToFunction (' + expr + ') EXCEPTION ' + e);
+				console.log("Could not eval to expression",expr,":",e);
 			}
 		}
 		return JsEvalContext.evalToFunctionCache_[expr];
@@ -1063,9 +1093,9 @@ __define("js-template",["jquery"],function(jQuery) {
 
 		processor.run_(bindFully(processor, processor.jstProcessOuter_,
 		context, template));
-		if (MAPS_DEBUG && opt_debugging) {
-			log('jstProcess:' + '\n' + processor.getLogs().join('\n'));
-		}
+		// if (MAPS_DEBUG && opt_debugging) {
+		// 	console.log('jstProcess:' + '\n' + processor.getLogs().join('\n'));
+		// }
 	}
 
 
@@ -1525,8 +1555,10 @@ __define("js-template",["jquery"],function(jQuery) {
 					context.jsexec(fn,template);
 				}
 				catch (e) {
-					log("jstProcessInner_: exception in "+JSTFN_DATA+
-						" function on element "+element+": "+fn);
+					// console.log("jstProcessInner_: exception in "+JSTFN_DATA+
+					// 	" function on element "+element+": "+fn);
+					console.log("Exception in ",fn,
+						" function on element ",element,": ",e.message);
 				}
 			});
 		}
@@ -2028,8 +2060,7 @@ __define("js-template",["jquery"],function(jQuery) {
 		jstLoadTemplate_(doc, loadHtmlFn(), opt_target || STRING_jsts);
 		var section = domGetElementById(doc, name);
 		if (!section) {
-			log("Error: jstGetTemplate was provided with opt_loadHtmlFn, " +
-				"but that function did not provide the id '" + name + "'.");
+			console.log("No id",name,"available from function ",loadHtmlFn);
 		}
 		return /** @type Element */(section);
 	}
