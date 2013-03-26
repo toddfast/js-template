@@ -782,12 +782,8 @@ __define("js-template",["jquery"],function(jQuery) {
 					// Ignore
 				}
 
-				console.error("Exception processing template at element ",
-					template,
-					":\n",
-					e.message,
-					"\nin ",
-					functionDeclaration);
+				console.error("Exception processing template: %o at %o (in %o)",e.message,
+					template,functionDeclaration);
 			}
 			return JsEvalContext.globals_[GLOB_default];
 		}
@@ -1569,12 +1565,8 @@ __define("js-template",["jquery"],function(jQuery) {
 						// Ignore
 					}
 
-					console.error("Exception in template callback at element ",
-						template,
-						":\n",
-						e.message,
-						"\nin ",
-						functionDeclaration);
+					console.error("Exception in template callback: %o at %o (in %o)",e.message,
+						template,functionDeclaration);
 				}
 			});
 		}
