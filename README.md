@@ -242,7 +242,7 @@ var favorites = ...;
 
 favorites.favs.push("monkeys");
 
-$("container")
+$("#container")
   .refillTemplate(favorites);
 ```
 
